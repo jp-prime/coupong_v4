@@ -24,6 +24,7 @@ export const metadata = {
 
 import { AuthProvider } from '../context/AuthContext';
 import BottomNav from '../components/layout/BottomNav';
+import { Analytics } from '@vercel/analytics/next';
 
 export default function RootLayout({ children }) {
   return (
@@ -37,6 +38,7 @@ export default function RootLayout({ children }) {
           {children}
           <BottomNav />
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
