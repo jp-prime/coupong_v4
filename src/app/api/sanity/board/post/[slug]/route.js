@@ -1,6 +1,8 @@
 import { SanityService } from '@/services/SanityService';
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request, { params }) {
     try {
         const resolvedParams = await params;

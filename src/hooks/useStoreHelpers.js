@@ -2,14 +2,16 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const useStoreHelpers = () => {
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
 
     const getLocalizedString = useCallback((field) => {
         if (!field) return '';
         if (typeof field === 'string') return field;
         if (typeof field === 'object') {
-            // 다국어 지원을 제거하고 무조건 한국어('ko')를 우선 반환합니다.
-            let val = field.ko || field.en || field.vi;
+            const currentLang = i18n?.language || 'ko';
+            // 1. 현재 사용자 설정 언어(ko, vi, en 등)에 맞는 값 우선 출력
+            // 2. 없을 경우 한국어 -> 영어 -> 베트남어 순으로 폴백
+            let val = field[currentLang] || field.ko || field.en || field.vi;
             
             // 메타데이터 필드를 제외한 유효한 키 중 첫 번째 값을 fallback으로 사용
             if (val === undefined || val === null || val === '') {
@@ -30,7 +32,7 @@ export const useStoreHelpers = () => {
             return '';
         }
         return String(field);
-    }, []);
+    }, [i18n?.language]);
 
     const getTranslatedLocation = useCallback((field) => {
         const str = getLocalizedString(field);

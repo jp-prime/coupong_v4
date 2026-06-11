@@ -8,12 +8,10 @@ import VisitorCounter from '../common/VisitorCounter';
 const Footer = () => {
     const { t } = useTranslation();
     const pathname = usePathname();
-    
-    // 메인 페이지 혹은 언어 포함 메인 페이지에서만 표시
-    const isMainPage = pathname === '/' || ['/ko', '/en', '/vi', '/zh-CN'].includes(pathname);
-
     // 스타일2 통합을 위해 푸터도 항상 라이트 모드 적용
     const isLightMode = true; 
+    const isMainPage = pathname === '/' || ['/ko', '/en', '/vi', '/zh-CN'].includes(pathname || '');
+    
     const bgColor = '#ffffff';
     const borderColor = '#e2e8f0';
     const textColorMain = '#0f172a';

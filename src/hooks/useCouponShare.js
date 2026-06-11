@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { CouponService } from '../services/CouponService';
 import { useAuth } from '../context/AuthContext';
-import { useTranslation } from 'react-i18next';
 import { useStoreHelpers } from './useStoreHelpers';
 import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export const useCouponShare = () => {
     const { isAdmin, user } = useAuth();
-    const { t } = useTranslation();
     const { getLocalizedString } = useStoreHelpers();
     
     // For admin modal
@@ -21,16 +19,16 @@ export const useCouponShare = () => {
         // 관리자 포함 모든 유저용 즉시 공유 (Direct Share)
         setIsSharing(true);
             try {
-                const storeName = getLocalizedString(store.name);
-                const slogan = getLocalizedString(store.slogan || store.storeDescription) || '';
+                const storeName = store && store.name ? getLocalizedString(store.name) : '쿠퐁 제휴점';
+                const slogan = store ? (getLocalizedString(store.slogan || store.storeDescription) || '') : '';
                 const shareTitle = `[${storeName}] 특별한 선물이 도착했습니다!`;
                 const shareText = `${storeName}에서 할인쿠폰을 쏩니다. 지금 혜택을 확인해보세요! 🎁`;
                 
                 const giftData = {
                     couponId: coupon.id,
-                    storeId: store.id,
+                    storeId: store ? store.id : '',
                     senderUid: user?.uid || 'guest',
-                    senderName: user ? (user.displayName || user.email) : t('common.anonymous', '비회원'),
+                    senderName: user ? (user.displayName || user.email) : '비회원',
                     shareMemo: '',
                     status: 'issued',
                     rewardAmount: 0,
@@ -41,9 +39,9 @@ export const useCouponShare = () => {
 
                 const sharedId = await CouponService.createSharedCoupon({
                     couponId: coupon.id,
-                    storeId: store.id,
+                    storeId: store ? store.id : '',
                     storeName: storeName,
-                    storeThumbnail: store.shareThumbnail || store.image || store.mainImage || '',
+                    storeThumbnail: store ? (store.shareThumbnail || store.image || store.mainImage || '') : '',
                     storeSlogan: slogan,
                     senderName: giftData.senderName,
                     senderUid: giftData.senderUid,
@@ -67,12 +65,7 @@ export const useCouponShare = () => {
                     };
                     const basePath = getBasePath();
                     
-                    let shareUrl = '';
-                    if (isLocal) {
-                        shareUrl = `${window.location.origin}${basePath}/coupon/share2/${sharedId}`;
-                    } else {
-                        shareUrl = `${window.location.origin}${basePath}/share.php?id=${sharedId}`;
-                    }
+                    const shareUrl = `${window.location.origin}${basePath}/coupon/share2/${sharedId}`;
 
                     if (navigator.share) {
                         await navigator.share({
@@ -87,9 +80,7 @@ export const useCouponShare = () => {
                 }
             } catch (error) {
                 console.error("Share failed:", error);
-                if (error.name !== 'AbortError') {
-                    alert("공유 중 오류가 발생했습니다.");
-                }
+                // 브라우저 기본 공유 취소 외의 실제 에러(네트워크 단절 등)만 구분해서 콘솔 출력하고 강제 얼럿 창을 띄우지 않습니다.
             } finally {
                 setIsSharing(false);
         }

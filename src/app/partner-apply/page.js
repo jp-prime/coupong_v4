@@ -82,8 +82,8 @@ export default function PartnerApplyPage() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
-            padding: '24px 16px',
+            justifyContent: 'flex-start',
+            padding: '50px 16px 100px 16px', // 상단 여백을 늘려 안정적으로 내려앉게 하고, 하단은 BottomNav 공간 확보
             fontFamily: "'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
         }}>
             {/* 로고 헤더 */}
@@ -464,7 +464,7 @@ export default function PartnerApplyPage() {
                                 style={{ color: '#94a3b8', lineHeight: 1.8, fontSize: '0.95rem', marginBottom: '32px' }}
                             >
                                 <strong style={{ color: '#c4b5fd' }}>{formData.companyName}</strong> 사장님,<br />
-                                입점 신청서가 접수되었습니다.<br /><br />
+                               입점 신청서가 접수되었습니다.<br /><br />
                                 확인 이메일을 발송했으며,<br />
                                 <strong style={{ color: 'white' }}>2~3 영업일 내</strong>에 담당자가<br />
                                 연락드릴 예정입니다.

@@ -1,27 +1,12 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  turbopack: {
-    root: __dirname,  // coupong_v4를 명시적 루트로 지정 (부모 폴더 제외)
-  },
-  async redirects() {
-    return [
-      {
-        source: '/board/:slug',
-        destination: '/board?slug=:slug',
-        permanent: true,
-      },
-      {
-        source: '/promo/:path*',
-        destination: '/board',
-        permanent: true,
-      },
-    ];
-  },
+  // output: 'export' 설정을 일시적으로 주석 처리하여 SSR 모드로 복귀합니다.
+  /*
+  output: 'export',
+  images: {
+    unoptimized: true,
+  }
+  */
 };
 
 export default nextConfig;

@@ -58,6 +58,7 @@ export default function BoardClient({ initialSelectedPost }) {
     const [loading, setLoading] = useState(true);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedPost, setSelectedPost] = useState(initialSelectedPost || null);
+    const [isDetailLoading, setIsDetailLoading] = useState(false); // 상세 내용 백그라운드 로드 감지
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('all');
 
@@ -216,12 +217,18 @@ export default function BoardClient({ initialSelectedPost }) {
     };
 
     const handlePostClick = async (post) => {
+        // 1. 주소창 URL 즉시 교체
         if (post.slug) {
             router.replace(`/board?slug=${encodeURIComponent(post.slug)}`, { scroll: false });
         } else {
             router.replace(`/board?id=${post.id}`, { scroll: false });
         }
 
+        // 2. 일단 상세 모달창을 즉시 띄우기 위해 리스트의 기본 정보로 상태 설정
+        setSelectedPost(post);
+        setIsDetailLoading(true);
+
+        // 3. 백그라운드 상세 정보 로드
         if (post.isBoardStorePost && post.slug) {
             try {
                 const store = await SanityService.getStoreByIdOrSlug(post.slug);
@@ -233,18 +240,20 @@ export default function BoardClient({ initialSelectedPost }) {
                         images: store.images?.length ? store.images : (post.images || []),
                         createdAt: post.createdAt,
                         authorName: "운영자",
-                        viewCount: 0,
+                        viewCount: post.viewCount || 0,
                         isSanityPost: true,
                         isBoardStorePost: true,
                         category: '가맹점 정보',
                         slug: store.slug || post.slug,
                         storeCategory: store.category,
                     });
-                    return;
                 }
             } catch (error) {
                 console.error("Failed to load board store post detail:", error);
+            } finally {
+                setIsDetailLoading(false);
             }
+            return;
         }
 
         if (post.slug && post.isSanityPost) {
@@ -258,20 +267,23 @@ export default function BoardClient({ initialSelectedPost }) {
                         images: fullPost.bannerImageUrl ? [fullPost.bannerImageUrl] : (fullPost.thumbnailUrl ? [fullPost.thumbnailUrl] : []),
                         createdAt: fullPost.publishedAt || new Date().toISOString(),
                         authorName: "운영자",
-                        viewCount: 0,
+                        viewCount: post.viewCount || 0,
                         isSanityPost: true,
                         category: fullPost.category,
                         slug: fullPost.slug,
                         ...fullPost
                     });
-                    return;
                 }
             } catch (error) {
                 console.error("Failed to load sanity post detail:", error);
+            } finally {
+                setIsDetailLoading(false);
             }
+            return;
         }
 
-        setSelectedPost(post);
+        // Firebase 포스트인 경우 별도 외부 백엔드 fetch가 필요 없으므로 즉시 완료 처리
+        setIsDetailLoading(false);
     };
 
     const fetchComments = async (postId) => {
@@ -766,6 +778,16 @@ export default function BoardClient({ initialSelectedPost }) {
                                 )}
                             </div>
                             <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
+                                {selectedPost.category === '가맹점 정보' && selectedPost.images && selectedPost.images.length > 0 && (
+                                    <div style={{ width: '100%', height: '180px', borderRadius: '16px', overflow: 'hidden', marginBottom: '20px' }}>
+                                        <img 
+                                            src={fixImageUrl(selectedPost.images[0])} 
+                                            alt="" 
+                                            referrerPolicy="no-referrer" 
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                        />
+                                    </div>
+                                )}
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
                                     <div style={{ padding: '4px 10px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: isKorean ? 800 : 800, background: '#6366f115', color: '#6366f1' }}>{selectedPost?.category || '공지사항'}</div>
                                     <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{selectedPost.createdAt?.toDate ? selectedPost.createdAt.toDate().toLocaleString() : (selectedPost.createdAt ? new Date(selectedPost.createdAt).toLocaleString() : '방금')}</span>
@@ -814,14 +836,26 @@ export default function BoardClient({ initialSelectedPost }) {
                                     marginBottom: '32px',
                                     fontFamily: bodyFont
                                 }}>
-                                    <RenderWithShortcodes 
-                                        text={selectedPost.content}
-                                        navigate={(path) => router.push(path)}
-                                        postImgs={selectedPost.images || []}
-                                    />
+                                    {isDetailLoading ? (
+                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 0', gap: '12px' }}>
+                                            <div style={{ width: 28, height: 28, border: '3px solid rgba(99,102,241,0.2)', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                                            <span style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: 700 }}>내용을 불러오는 중...</span>
+                                            <style>{`
+                                                @keyframes spin {
+                                                    to { transform: rotate(360deg); }
+                                                }
+                                            `}</style>
+                                        </div>
+                                    ) : (
+                                        <RenderWithShortcodes 
+                                            text={selectedPost.content}
+                                            navigate={(path) => router.push(path)}
+                                            postImgs={selectedPost.images || []}
+                                        />
+                                    )}
                                 </div>
 
-                                {selectedPost.images && selectedPost.images.length > 0 && (
+                                {selectedPost.images && selectedPost.images.length > 0 && selectedPost.category !== '가맹점 정보' && (
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '40px' }}>
                                         {selectedPost.images.map((img, idx) => {
                                             const isBanner = selectedPost.bannerImageUrl === img;
@@ -841,9 +875,35 @@ export default function BoardClient({ initialSelectedPost }) {
                                                     </a>
                                                 );
                                             }
-                                            
                                             return <React.Fragment key={idx}>{imgElement}</React.Fragment>;
                                         })}
+                                    </div>
+                                )}
+
+                                {selectedPost.isBoardStorePost && (
+                                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px', marginTop: '24px' }}>
+                                        <button 
+                                            onClick={() => {
+                                                router.push(`/store/${selectedPost.slug || selectedPost.id}`);
+                                            }}
+                                            style={{
+                                                background: '#0f172a',
+                                                color: 'white',
+                                                border: 'none',
+                                                padding: '14px 28px',
+                                                borderRadius: '100px',
+                                                fontSize: '0.95rem',
+                                                fontWeight: 950,
+                                                cursor: 'pointer',
+                                                boxShadow: '0 6px 16px rgba(15, 23, 42, 0.15)',
+                                                transition: 'transform 0.2s',
+                                                width: '100%',
+                                                maxWidth: '320px',
+                                                textAlign: 'center'
+                                            }}
+                                        >
+                                            쿠폰홈페이지에서 보기
+                                        </button>
                                     </div>
                                 )}
 

@@ -1102,7 +1102,7 @@ export default function StoreRegisterClient() {
                         name="wordpressUrl"
                         value={formData.wordpressUrl || ''}
                         onChange={handleChange}
-                        placeholder="예: https://vn.coupong.online/2026/05/24/예제-글/"
+                        placeholder="예: https://coupong.online/2026/05/24/예제-글/"
                         style={{ ...inputStyle, marginBottom: '16px' }}
                     />
                     

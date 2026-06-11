@@ -86,25 +86,4 @@ import StoreDetailClient from './StoreDetailClient';
 
 export default async function StoreDetailPage({ params }) {
     const { id } = await params;
-    
-    let storeData = null;
-    try {
-        const { SanityService } = await import('../../../services/SanityService');
-        storeData = await SanityService.getStoreByIdOrSlug(id);
-        
-        if (!storeData) {
-            const { StoreService } = await import('../../../services/StoreService');
-            const isFirestoreId = /^[a-zA-Z0-9]{20}$/.test(id);
-            if (isFirestoreId) {
-                storeData = await StoreService.getStoreById(id);
-            }
-            if (!storeData || !storeData.name || storeData.name === "이름 없음") {
-                storeData = await StoreService.getStoreBySlug(id);
-            }
-        }
-    } catch (e) {
-        console.error("Failed to fetch store data on server side:", e);
-    }
-
-    return <StoreDetailClient id={id} initialStoreData={storeData} />;
-}
+    return <StoreDetailClient id={id} initialStoreData={null} />;}

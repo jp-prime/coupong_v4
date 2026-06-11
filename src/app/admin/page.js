@@ -71,6 +71,8 @@ export default function AdminDashboardPage() {
     const [pendingAppCount, setPendingAppCount] = useState(0);
     const [todayVisitors, setTodayVisitors] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [isCacheEnabled, setIsCacheEnabled] = useState(true);
+    const [togglingCache, setTogglingCache] = useState(false);
     const { getLocalizedString, fixImageUrl } = useStoreHelpers();
 
     const [windowWidth, setWindowWidth] = useState(1024);
@@ -107,12 +109,40 @@ export default function AdminDashboardPage() {
         fetchAllStats();
     }, [isAdmin, isStoreOwner, authLoading, router, user]);
 
+    const handleToggleCacheMode = async () => {
+        setTogglingCache(true);
+        try {
+            const { doc, setDoc } = await import('firebase/firestore');
+            const { db } = await import('@/firebase');
+            const cacheSettingRef = doc(db, 'system_settings', 'caching');
+            const nextState = !isCacheEnabled;
+            
+            await setDoc(cacheSettingRef, { isEnabled: nextState }, { merge: true });
+            setIsCacheEnabled(nextState);
+            alert(`캐싱 모드가 ${nextState ? '1시간 보관(속도 우선)' : '실시간 갱신(작업 우선)'}으로 변경되었습니다.`);
+        } catch (e) {
+            console.error("Failed to toggle cache mode:", e);
+            alert("캐시 모드 수정에 실패했습니다.");
+        } finally {
+            setTogglingCache(false);
+        }
+    };
+
     const fetchAllStats = async () => {
         setLoading(true);
         try {
-            const { collection, getDocs, query, where } = await import('firebase/firestore');
+            const { collection, getDocs, query, where, doc, getDoc } = await import('firebase/firestore');
             const { db } = await import('@/firebase');
             const { UserService } = await import('@/services/UserService');
+
+            // 0. Fetch cache state
+            try {
+                const cacheSettingRef = doc(db, 'system_settings', 'caching');
+                const docSnap = await getDoc(cacheSettingRef);
+                if (docSnap.exists()) {
+                    setIsCacheEnabled(docSnap.data().isEnabled !== false);
+                }
+            } catch (e) {}
 
             // 1. Fetch Stores
             const storeData = await StoreService.getAllStores();
@@ -192,11 +222,74 @@ export default function AdminDashboardPage() {
 
             <div style={{ maxWidth: '1280px', margin: '0 auto', padding: isPC ? '0 40px' : '0 16px' }}>
                 {/* Stats Summary */}
-                <div style={{ display: 'grid', gridTemplateColumns: isPC ? 'repeat(4, 1fr)' : 'repeat(2, 1fr)', gap: '16px', marginBottom: '32px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isPC ? 'repeat(4, 1fr)' : 'repeat(2, 1fr)', gap: '16px', marginBottom: '24px' }}>
                     <StatCard label="총 등록 업소" value={stores.length} color="#6366f1" onClick={() => router.push('/admin/all-stores')} />
                     <StatCard label="오늘 방문자" value={todayVisitors} color="#10b981" onClick={() => router.push('/admin/analytics')} />
                     <StatCard label="미승인 신청" value={pendingAppCount} color="#f43f5e" onClick={() => router.push('/admin/partner-apply-v2')} />
                     <StatCard label="전체 회원" value={memberCount} color="#3b82f6" onClick={() => router.push('/admin/members')} />
+                </div>
+
+                {/* ⚡ 캐시 제어 스위치 */}
+                <div style={{
+                    background: isCacheEnabled ? 'rgba(16, 185, 129, 0.05)' : 'rgba(245, 158, 11, 0.05)',
+                    border: `1.5px solid ${isCacheEnabled ? '#10b981' : '#f59e0b'}`,
+                    padding: '16px 24px',
+                    borderRadius: '24px',
+                    marginBottom: '24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '12px',
+                    transition: 'all 0.3s'
+                }}>
+                    <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span style={{
+                                width: '10px', height: '10px', borderRadius: '50%',
+                                background: isCacheEnabled ? '#10b981' : '#f59e0b',
+                                display: 'inline-block',
+                                animation: isCacheEnabled ? 'none' : 'pulse 1.5s infinite'
+                            }} />
+                            <h3 style={{ fontSize: '1rem', fontWeight: 900, margin: 0, color: '#1e293b' }}>
+                                상점 API 캐시 모드 제어
+                            </h3>
+                        </div>
+                        <p style={{ fontSize: '0.8rem', color: '#64748b', margin: '4px 0 0 0', fontWeight: 600 }}>
+                            {isCacheEnabled 
+                                ? "⚡ 캐싱 모드 작동 중: 사용자가 상세 페이지에 즉시 진입할 수 있도록 1시간 동안 데이터를 보관합니다."
+                                : "🛠️ 실시간 작업 모드 작동 중: Sanity에서 수정한 내용이 사이트에 즉시 리로드되어 갱신을 바로 테스트할 수 있습니다."}
+                        </p>
+                    </div>
+                    <button
+                        onClick={handleToggleCacheMode}
+                        disabled={togglingCache}
+                        style={{
+                            padding: '10px 20px',
+                            borderRadius: '16px',
+                            background: isCacheEnabled ? '#10b981' : '#f59e0b',
+                            color: 'white',
+                            border: 'none',
+                            fontWeight: 900,
+                            cursor: 'pointer',
+                            fontSize: '0.85rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                            transition: 'all 0.2s'
+                        }}
+                    >
+                        {togglingCache && <Loader2 size={14} className="animate-spin" />}
+                        {isCacheEnabled ? "실시간 작업 모드로 전환" : "1시간 캐시 보관 모드로 전환"}
+                    </button>
+                    <style>{`
+                        @keyframes pulse {
+                            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+                            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+                            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+                        }
+                    `}</style>
                 </div>
 
                 {/* Quick Action Button */}

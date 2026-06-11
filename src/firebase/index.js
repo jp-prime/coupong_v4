@@ -4,19 +4,14 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { getAnalytics } from "firebase/analytics";
 
-// TODO: Replace with your Firebase project configuration
-// 1. Visit https://console.firebase.google.com/
-// 2. Create a new project (or select an existing one)
-// 3. Go to Project Settings > General > Your apps > Add web app
-// 4. Copy the "firebaseConfig" object and paste it below
 const firebaseConfig = {
-    apiKey: "AIzaSyBR1SYPun3h8W-by8TUKe-QepyFUtLQRGg",
+    apiKey: "AIzaSyC6RYzyhKUpCsrH_b-xgoy_-ZMNvFiTEQI",
     authDomain: "coupong-98b03.firebaseapp.com",
     projectId: "coupong-98b03",
     storageBucket: "coupong-98b03.firebasestorage.app",
     messagingSenderId: "1095510519046",
-    appId: "1:1095510519046:web:a5efdc287be15819d44287",
-    measurementId: "G-DJJ46D7WJW"
+    appId: "1:1095510519046:web:da0bb580d6948dfdd44287",
+    measurementId: "G-SV2ZZQG08Q"
 };
 
 // Initialize Firebase

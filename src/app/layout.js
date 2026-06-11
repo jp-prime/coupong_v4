@@ -20,6 +20,7 @@ export const metadata = {
 };
 
 import { AuthProvider } from '../context/AuthContext';
+import BottomNav from '../components/layout/BottomNav';
 
 export default function RootLayout({ children }) {
   return (
@@ -28,9 +29,10 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col" suppressHydrationWarning>
+      <body className="min-h-full flex flex-col pb-[70px]" suppressHydrationWarning>
         <AuthProvider>
           {children}
+          <BottomNav />
         </AuthProvider>
       </body>
     </html>

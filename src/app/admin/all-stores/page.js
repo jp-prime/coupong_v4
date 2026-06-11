@@ -292,6 +292,21 @@ export default function AdminAllStoresPage() {
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem', color: '#64748b' }}>
                                                 <Phone size={12} /> {store.phoneNumber || store.phone || '연락처 정보 없음'}
                                             </div>
+                                            <div style={{ display: 'flex', gap: '8px', fontSize: '0.75rem', marginTop: '4px', flexWrap: 'wrap' }}>
+                                                <span style={{ background: '#e2e8f0', color: '#334155', padding: '1px 6px', borderRadius: '4px', fontFamily: 'monospace' }}>
+                                                    ID: {store.id}
+                                                </span>
+                                                {store.slug && (
+                                                    <span style={{ background: '#dcfce7', color: '#15803d', padding: '1px 6px', borderRadius: '4px', fontFamily: 'monospace' }}>
+                                                        Slug: {store.slug}
+                                                    </span>
+                                                )}
+                                                {store.isSanityData && (
+                                                    <span style={{ background: '#fee2e2', color: '#991b1b', padding: '1px 6px', borderRadius: '4px', fontWeight: 'bold' }}>
+                                                        Sanity
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                     <div style={{ textAlign: 'right' }}>

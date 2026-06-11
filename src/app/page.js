@@ -7,6 +7,7 @@ import { StoreService } from '@/services/StoreService';
 import HeaderV2 from '@/components/style2/HeaderV2';
 import HeroSliderV2 from '@/components/style2/HeroSliderV2';
 import CompactStoreCard from '@/components/style2/CompactStoreCard';
+import Footer from '@/components/layout/Footer';
 import { Loader2, ChevronDown, Search } from 'lucide-react';
 import '@/i18n'; // i18n 초기화 로드
 
@@ -16,7 +17,7 @@ export default function CouponsV2() {
     const [stores, setStores] = useState([]);
     const [loading, setLoading] = useState(true);
     const [windowWidth, setWindowWidth] = useState(375); // 기본 모바일 값 세팅 (Hydration 대비)
-    const [visibleCount, setVisibleCount] = useState(18);
+    const [visibleCount, setVisibleCount] = useState(12);
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
@@ -97,8 +98,8 @@ export default function CouponsV2() {
                     </div>
                 </div>
 
+                <div style={{ padding: windowWidth < 640 ? '0 12px' : '0 20px' }}>
 
-                <div style={{ padding: windowWidth < 640 ? '0 5px' : '0 20px' }}>
                     {/* 타이틀 */}
                     <div style={{ 
                         display: 'flex', 
@@ -146,7 +147,7 @@ export default function CouponsV2() {
                     {!loading && visibleCount < filteredStores.length && (
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px' }}>
                             <button 
-                                onClick={() => setVisibleCount(prev => prev + 18)}
+                                onClick={() => setVisibleCount(prev => prev + 12)}
                                 style={{ 
                                     padding: '12px 40px', borderRadius: '12px', background: '#f8fafc',
                                     color: '#0f172a', border: '1px solid #e2e8f0', fontWeight: 800,
@@ -161,6 +162,7 @@ export default function CouponsV2() {
                     )}
                 </div>
             </main>
+            <Footer />
             <style>{`
                 .hide-scrollbar::-webkit-scrollbar {
                     display: none;

@@ -3,7 +3,7 @@ import { createClient } from '@sanity/client';
 const client = createClient({
   projectId: '8xyje6wz',
   dataset: 'production',
-  useCdn: true, // CDN 캐시를 사용하여 메인 로딩 성능을 비약적으로 개선
+  useCdn: false, // 실시간 데이터 갱신 및 동기화를 위해 CDN 캐시 사용 해제
   apiVersion: '2023-05-03', // Sanity API 버전 지정
   requestTag: 'fresh',
 });
@@ -21,7 +21,7 @@ export const SanityService = {
       } catch (e) {}
 
       if (typeof window !== 'undefined') {
-        const res = await fetch(`/api/sanity/store/${encodeURIComponent(decodedIdOrSlug)}`);
+        const res = await fetch(`/api/sanity/store/${encodeURIComponent(decodedIdOrSlug)}?t=${Date.now()}`);
         if (res.ok) {
           return await res.json();
         }
@@ -159,7 +159,7 @@ export const SanityService = {
   getAllStores: async () => {
     try {
       if (typeof window !== 'undefined') {
-        const res = await fetch('/api/sanity/stores');
+        const res = await fetch(`/api/sanity/stores?t=${Date.now()}`);
         if (res.ok) {
           return await res.json();
         }
@@ -170,18 +170,30 @@ export const SanityService = {
         firestoreId,
         "slug": slug.current,
         name,
+        nameVi,
+        nameEn,
         category,
         slogan,
+        sloganVi,
+        sloganEn,
         phone,
         location,
+        locationVi,
+        locationEn,
         googleMapUrl,
+        wordpressUrl,
         vnIntro,
         videoKeywords,
         vnIntro2,
         videoKeywords2,
         galleryTags,
         description,
+        descriptionVi,
+        descriptionEn,
         kakaoId,
+        youtubeLink,
+        instagramLink,
+        tiktokLink,
         "images": images[].asset->url,
         imageUrls
       }`;
@@ -205,39 +217,51 @@ export const SanityService = {
           sanityId: result._id,
           slug: result.slug || '',
           name: {
-            ko: result.name || ''
+            ko: result.name || '',
+            vi: result.nameVi || result.name || '',
+            en: result.nameEn || result.name || ''
           },
           category: result.category || '기타',
           slogan: {
-            ko: result.slogan || ''
+            ko: result.slogan || '',
+            vi: result.sloganVi || result.slogan || '',
+            en: result.sloganEn || result.slogan || ''
           },
           businessHours: '',
           phone: result.phone || '',
           phoneNumber: result.phone || '',
           address: {
-            ko: result.location || ''
+            ko: result.location || '',
+            vi: result.locationVi || result.location || '',
+            en: result.locationEn || result.location || ''
           },
           location: {
-            ko: result.location || ''
+            ko: result.location || '',
+            vi: result.locationVi || result.location || '',
+            en: result.locationEn || result.location || ''
           },
           googleMapUrl: result.googleMapUrl || '',
           mapUrl: result.googleMapUrl || '',
-          wordpressUrl: '',
+          wordpressUrl: result.wordpressUrl || '',
           vnIntro: result.vnIntro || '',
           videoKeywords: result.videoKeywords || [],
           vnIntro2: result.vnIntro2 || '',
           videoKeywords2: result.videoKeywords2 || [],
           galleryTags: result.galleryTags || [],
           storeDescription: {
-            ko: result.description || ''
+            ko: result.description || '',
+            vi: result.descriptionVi || result.description || '',
+            en: result.descriptionEn || result.description || ''
           },
           description: {
-            ko: result.description || ''
+            ko: result.description || '',
+            vi: result.descriptionVi || result.description || '',
+            en: result.descriptionEn || result.description || ''
           },
           kakaoId: result.kakaoId || '',
-          youtubeLink: '',
-          instagramLink: '',
-          tiktokLink: '',
+          youtubeLink: result.youtubeLink || '',
+          instagramLink: result.instagramLink || '',
+          tiktokLink: result.tiktokLink || '',
           image: finalImage,
           images: gallery.length > 0 ? gallery : [finalImage],
           imageUrls: linkImages,

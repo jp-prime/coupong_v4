@@ -69,15 +69,8 @@ export const StoreService = {
     // 1. 업체 목록 불러오기 (캐싱 적용으로 초고속 반환)
     getAllStores: async (includeInactive = false) => {
         try {
-            // 캐시가 있으면 즉시 캐시된 데이터를 무거운 네트워크 호출 없이 반환
-            if (storesCache && storesCache.length > 0) {
-                return storesCache;
-            }
             const result = await StoreService.getStoresPaged(includeInactive, 2000);
-            if (result && result.stores) {
-                storesCache = result.stores;
-            }
-            return result.stores;
+            return result.stores || [];
         } catch (error) {
             console.error("Error in getAllStores:", error);
             return [];

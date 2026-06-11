@@ -192,15 +192,13 @@ const HeaderV2 = ({ searchQuery, setSearchQuery, isTransparent = false }) => {
                                                     <div style={{ height: '1px', background: '#f1f5f9', margin: '4px 8px' }} />
                                                     {isAdmin && <div onClick={() => { 
                                                         playTickSound();
-                                                        const targetUrl = window.location.hostname === 'localhost' ? 'http://localhost:19999/admin' : 'https://coupong.online/admin';
-                                                        window.location.href = targetUrl;
+                                                        router.push('/admin');
                                                         setIsMenuOpen(false); 
                                                     }} className="dropdown-item" style={{ ...dropdownItemStyle, color: '#ef4444' }}><ShieldCheck size={18} /> 어드민 관리</div>}
                                                     {isAdmin && <div onClick={() => { playTickSound(); router.push('/video'); setIsMenuOpen(false); }} className="dropdown-item" style={{ ...dropdownItemStyle, color: '#f59e0b' }}><Video size={18} /> 영상 메이커</div>}
                                                     {isStoreOwner && <div onClick={() => { 
                                                         playTickSound();
-                                                        const targetUrl = window.location.hostname === 'localhost' ? 'http://localhost:19999/admin/store-owner' : 'https://coupong.online/admin/store-owner';
-                                                        window.location.href = targetUrl;
+                                                        router.push('/admin/store-owner');
                                                         setIsMenuOpen(false); 
                                                     }} className="dropdown-item" style={{ ...dropdownItemStyle, color: '#6366f1' }}><StoreIcon size={18} /> 가맹점 관리</div>}
                                                 </>

@@ -53,71 +53,9 @@ export default function StoreDetailClient({ id, initialStoreData }) {
     const { i18n } = useTranslation();
     const { fixImageUrl, getLocalizedString, getTranslatedCategory } = useStoreHelpers();
 
-    // WordPress Integration states
     const [wpContent, setWpContent] = useState('');
     const [wpLoading, setWpLoading] = useState(false);
     const [wpError, setWpError] = useState(null);
-
-    const fetchWordPressContent = useCallback(async (url) => {
-        if (!url) return;
-        setWpLoading(true);
-        setWpError(null);
-        
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 7000); // 7초 타임아웃 설정
-        
-        try {
-            let cleanUrl = url.trim();
-            if (cleanUrl.endsWith('/')) {
-                cleanUrl = cleanUrl.slice(0, -1);
-            }
-            
-            const urlParts = cleanUrl.split('/');
-            let slug = urlParts[urlParts.length - 1];
-            
-            try {
-                slug = decodeURIComponent(slug);
-            } catch (e) {}
-            
-            const encodedSlug = encodeURIComponent(slug);
-            
-            let domain = 'https://vn.coupong.online';
-            try {
-                const urlObj = new URL(cleanUrl);
-                domain = urlObj.origin;
-            } catch (e) {
-                if (cleanUrl.startsWith('http')) {
-                    const match = cleanUrl.match(/^https?:\/\/[^\/]+/);
-                    if (match) domain = match[0];
-                }
-            }
-
-            const apiEndpoint = `${domain}/wp-json/wp/v2/posts?slug=${encodedSlug}`;
-            const response = await fetch(apiEndpoint, { signal: controller.signal });
-            clearTimeout(timeoutId);
-            
-            if (!response.ok) {
-                throw new Error(`WordPress API HTTP error! status: ${response.status}`);
-            }
-            
-            const posts = await response.json();
-            if (posts && posts.length > 0) {
-                setWpContent(posts[0].content?.rendered || '');
-            } else {
-                throw new Error('워드프레스에서 글을 찾을 수 없습니다.');
-            }
-        } catch (err) {
-            clearTimeout(timeoutId);
-            console.error('Failed to fetch WordPress content:', err);
-            if (err.name === 'AbortError') {
-                setWpError('워드프레스 서버 응답 시간이 초과되었습니다.');
-            } else {
-                setWpError(err.message);
-            }
-        } finally {
-            setWpLoading(false);
-        }
-    }, []);
 
     const formatPrice = (priceStr) => {
         if (!priceStr) return '';
@@ -137,6 +75,37 @@ export default function StoreDetailClient({ id, initialStoreData }) {
     const [isLiked, setIsLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
     const [selectedImage, setSelectedImage] = useState(null);
+
+    // 상세정보 개별 국기 언어 선택 상태 복구
+    const [detailLang, setDetailLang] = useState(i18n.language || 'ko');
+    
+    // 사용 가능한 언어 목록 계산 (새니티 번역 데이터 존재 여부 기준)
+    const availableLangs = useMemo(() => {
+        if (!store) return [{ code: 'ko', label: '한국어' }];
+        const langs = [];
+        // 기본적으로 한국어는 활성화
+        langs.push({ code: 'ko', label: '한국어' });
+        
+        // 베트남어 데이터 존재 시
+        const hasVi = store.nameVi || store.sloganVi || store.locationVi || (store.descriptionVi && store.descriptionVi.trim()) || (store.description && store.description.vi);
+        if (hasVi) {
+            langs.push({ code: 'vi', label: 'Tiếng Việt' });
+        }
+        
+        // 영어 데이터 존재 시
+        const hasEn = store.nameEn || store.sloganEn || store.locationEn || (store.descriptionEn && store.descriptionEn.trim()) || (store.description && store.description.en);
+        if (hasEn) {
+            langs.push({ code: 'en', label: 'English' });
+        }
+        return langs;
+    }, [store]);
+
+    // 사이트 전역 언어 변경 시 상세페이지 선택 언어도 맞춰 갱신
+    useEffect(() => {
+        if (i18n.language) {
+            setDetailLang(i18n.language);
+        }
+    }, [i18n.language]);
 
     const { 
         isGiftModalOpen, setIsGiftModalOpen, 
@@ -256,11 +225,7 @@ export default function StoreDetailClient({ id, initialStoreData }) {
                     setIsLiked(false);
                 }
                 
-                if (data.wordpressUrl) {
-                    fetchWordPressContent(data.wordpressUrl);
-                } else {
-                    setWpContent('');
-                }
+                setWpContent('');
                 
                 setTimeout(() => {
                     StoreService.getAllStores().then(allStores => {
@@ -274,12 +239,11 @@ export default function StoreDetailClient({ id, initialStoreData }) {
         } finally { 
             setLoading(false); 
         }
-    }, [id, router, i18n.language, fetchWordPressContent, getLocalizedString, initialStoreData, store]);
+    }, [id, router, i18n.language, getLocalizedString, initialStoreData]);
 
     useEffect(() => {
         const handleResize = () => setWindowWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
-        window.scrollTo(0, 0);
         if (id) fetchStoreData();
         return () => window.removeEventListener('resize', handleResize);
     }, [id, fetchStoreData]);
@@ -604,6 +568,47 @@ export default function StoreDetailClient({ id, initialStoreData }) {
                                         </h3>
                                     </div>
 
+                                    {/* 상세정보 개별 국기 언어 선택 버튼 복구 */}
+                                    {availableLangs.length > 1 && (
+                                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                            {availableLangs.map(lang => {
+                                                const flagUrls = {
+                                                    ko: 'https://flagcdn.com/w40/kr.png',
+                                                    vi: 'https://flagcdn.com/w40/vn.png',
+                                                    en: 'https://flagcdn.com/w40/us.png'
+                                                };
+                                                return (
+                                                    <button
+                                                        key={lang.code}
+                                                        onClick={() => setDetailLang(lang.code)}
+                                                        style={{
+                                                            padding: '2px',
+                                                            borderRadius: '6px',
+                                                            background: 'transparent',
+                                                            border: 'none',
+                                                            cursor: 'pointer',
+                                                            transition: 'all 0.2s',
+                                                            filter: detailLang === lang.code ? 'grayscale(0%)' : 'grayscale(80%)',
+                                                            opacity: detailLang === lang.code ? 1 : 0.4,
+                                                            transform: detailLang === lang.code ? 'scale(1.1)' : 'scale(1.0)'
+                                                        }}
+                                                    >
+                                                        <img 
+                                                            src={flagUrls[lang.code]} 
+                                                            alt={lang.code} 
+                                                            style={{ 
+                                                                width: '26px', 
+                                                                height: 'auto', 
+                                                                borderRadius: '4px',
+                                                                boxShadow: '0 2px 5px rgba(0,0,0,0.12)',
+                                                                display: 'block'
+                                                            }} 
+                                                        />
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div style={{ position: 'relative' }}>
@@ -638,199 +643,21 @@ export default function StoreDetailClient({ id, initialStoreData }) {
                                             )}
                                         </div>
                                     )}
-
                                     <div>
-                                        {false ? (
-                                            <>
-                                                <style>{`
-                                                    .wordpress-embed-content img {
-                                                        max-width: 100% !important;
-                                                        height: auto !important;
-                                                        border-radius: 12px;
-                                                        margin: 12px 0;
-                                                        display: block;
-                                                    }
-                                                    .wordpress-embed-content table {
-                                                        width: 100% !important;
-                                                        border-collapse: collapse;
-                                                        margin: 16px 0;
-                                                        font-size: 0.9rem;
-                                                    }
-                                                    .wordpress-embed-content th, .wordpress-embed-content td {
-                                                        border: 1px solid #e2e8f0;
-                                                        padding: 8px 12px;
-                                                        text-align: left;
-                                                    }
-                                                    .wordpress-embed-content th {
-                                                        background-color: #f8fafc;
-                                                        font-weight: 700;
-                                                    }
-                                                    .wordpress-embed-content p {
-                                                        margin-bottom: 14px;
-                                                    }
-                                                    .wordpress-embed-content iframe {
-                                                        max-width: 100% !important;
-                                                        border: none !important;
-                                                        display: block;
-                                                        margin: 12px auto;
-                                                        transform: translate3d(0, 0, 0);
-                                                        -webkit-transform: translate3d(0, 0, 0);
-                                                        backface-visibility: hidden;
-                                                        -webkit-backface-visibility: hidden;
-                                                        aspect-ratio: 16 / 9;
-                                                    }
-                                                    .wordpress-embed-content iframe[src*="shorts"],
-                                                    .wordpress-embed-content iframe[src*="youtube.com/embed/"][width="360"],
-                                                    .wordpress-embed-content iframe[src*="youtube.com/embed/"][width="315"],
-                                                    .wordpress-embed-content iframe[src*="youtube-shorts"] {
-                                                        aspect-ratio: 9 / 16 !important;
-                                                        max-width: 360px !important;
-                                                    }
-                                                    .wordpress-embed-content blockquote {
-                                                        border: 1px solid rgba(99, 102, 241, 0.15) !important;
-                                                        border-left: 4px solid #6366f1 !important;
-                                                        background-color: rgba(99, 102, 241, 0.04) !important;
-                                                        padding: 14px 20px !important;
-                                                        margin: 18px 0 !important;
-                                                        border-radius: 12px !important;
-                                                        color: #312e81 !important;
-                                                    }
-                                                    .wordpress-embed-content blockquote p {
-                                                        margin-bottom: 8px !important;
-                                                        font-size: 0.95rem !important;
-                                                        line-height: 1.6 !important;
-                                                        color: #312e81 !important;
-                                                        font-style: normal !important;
-                                                    }
-                                                    .wordpress-embed-content blockquote p:last-child {
-                                                        margin-bottom: 0 !important;
-                                                    }
-                                                    .wordpress-embed-content blockquote cite,
-                                                    .wordpress-embed-content blockquote footer {
-                                                        display: block !important;
-                                                        font-size: 0.8rem !important;
-                                                        color: #94a3b8 !important;
-                                                        margin-top: 8px !important;
-                                                        font-style: normal !important;
-                                                        font-weight: 600 !important;
-                                                    }
-                                                    .wordpress-embed-content blockquote blockquote {
-                                                        border-left: 3px solid #cbd5e1 !important;
-                                                        background-color: #ffffff !important;
-                                                        margin: 10px 0 0 10px !important;
-                                                        padding: 8px 12px !important;
-                                                        font-style: normal !important;
-                                                    }
-                                                    .wordpress-embed-content .wp-block-group {
-                                                        padding: 20px !important;
-                                                        margin: 20px 0 !important;
-                                                        border-radius: 12px !important;
-                                                    }
-                                                    .wordpress-embed-content .has-background {
-                                                        padding: 20px !important;
-                                                        margin: 18px 0 !important;
-                                                        border-radius: 12px !important;
-                                                    }
-                                                    .wordpress-embed-content .has-border-color {
-                                                        border-style: solid !important;
-                                                        border-width: 1px !important;
-                                                        border-color: #e2e8f0 !important;
-                                                    }
-                                                    .wordpress-embed-content .has-light-gray-background-color {
-                                                        background-color: #f5f5f5 !important;
-                                                    }
-                                                    .wordpress-embed-content .has-light-gray-border-color {
-                                                        border-color: #e0e0e0 !important;
-                                                    }
-                                                    .wordpress-embed-content .has-white-background-color {
-                                                        background-color: #ffffff !important;
-                                                    }
-                                                    .wordpress-embed-content .wp-block-preformatted,
-                                                    .wordpress-embed-content pre {
-                                                        background-color: #f5f5f5 !important;
-                                                        border: 1px solid #e0e0e0 !important;
-                                                        padding: 16px 20px !important;
-                                                        margin: 18px 0 !important;
-                                                        border-radius: 8px !important;
-                                                        font-family: var(--font-base), sans-serif !important;
-                                                        font-size: 0.92rem !important;
-                                                        line-height: 1.65 !important;
-                                                        color: #334155 !important;
-                                                        white-space: pre-wrap !important;
-                                                        word-break: break-all !important;
-                                                    }
-                                                    .wordpress-embed-content .wp-block-columns {
-                                                        display: flex !important;
-                                                        gap: 16px !important;
-                                                        flex-wrap: wrap !important;
-                                                        margin: 20px 0 !important;
-                                                    }
-                                                    .wordpress-embed-content .wp-block-column {
-                                                        flex: 1 !important;
-                                                        min-width: 200px !important;
-                                                    }
-                                                    .wordpress-embed-content .wp-block-media-text {
-                                                        display: flex !important;
-                                                        flex-direction: column !important;
-                                                        gap: 16px !important;
-                                                        border: 1px solid #e2e8f0 !important;
-                                                        border-radius: 16px !important;
-                                                        padding: 16px !important;
-                                                        background-color: #ffffff !important;
-                                                        margin: 20px 0 !important;
-                                                    }
-                                                    @media (min-width: 480px) {
-                                                        .wordpress-embed-content .wp-block-media-text {
-                                                            flex-direction: row !important;
-                                                        }
-                                                    }
-                                                    .wordpress-embed-content .wp-block-button,
-                                                    .wordpress-embed-content button,
-                                                    .wordpress-embed-content .wp-block-button__link,
-                                                    .wordpress-embed-content a[class*="wp-block-button"] {
-                                                        display: none !important;
-                                                    }
-                                                    .wp-callout-box {
-                                                        background-color: #f8fafc !important;
-                                                        border: 1px solid #e2e8f0 !important;
-                                                        border-radius: 12px !important;
-                                                        padding: 12px 16px !important;
-                                                        margin: 14px 0 !important;
-                                                        color: #475569 !important;
-                                                        font-size: 0.92rem !important;
-                                                        font-weight: 600 !important;
-                                                        line-height: 1.6 !important;
-                                                        display: block !important;
-                                                        box-shadow: inset 0 1px 2px rgba(0,0,0,0.01) !important;
-                                                    }
-                                                `}</style>
-                                                <div 
-                                                    className="wordpress-embed-content"
-                                                    dangerouslySetInnerHTML={{ 
-                                                        __html: wpContent.replace(
-                                                            /(?:<p>)?\$\s+([^<\n\r]+)(?:<\/p>)?/gi, 
-                                                            '<div class="wp-callout-box">$1</div>'
-                                                        ) 
-                                                    }}
-                                                    style={{
-                                                        lineHeight: '1.8',
-                                                        fontSize: '15px',
-                                                        color: 'var(--color-text-main)',
-                                                        userSelect: 'text',
-                                                        WebkitUserSelect: 'text',
-                                                        isolation: 'isolate'
-                                                    }}
-                                                />
-                                            </>
-                                        ) : (
-                                            <RenderWithShortcodes 
-                                                text={getLocalizedString(store.description)}
-                                                navigate={router.push}
-                                                postImgs={gallery}
-                                                linkedStore={store}
-                                            />
-                                        )}
-                                        
+                                        <RenderWithShortcodes 
+                                            text={
+                                                store.isSanityData
+                                                    ? (detailLang === 'vi' 
+                                                        ? store.descriptionVi || store.description?.vi || store.description?.ko || ''
+                                                        : detailLang === 'en'
+                                                            ? store.descriptionEn || store.description?.en || store.description?.ko || ''
+                                                            : store.description?.ko || store.description || '')
+                                                    : getLocalizedString(store.description)
+                                            }
+                                            navigate={router.push}
+                                            postImgs={gallery}
+                                            linkedStore={store}
+                                        />
                                     </div>
 
                                 </div>
