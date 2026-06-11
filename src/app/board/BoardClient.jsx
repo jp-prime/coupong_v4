@@ -499,7 +499,7 @@ export default function BoardClient({ initialSelectedPost }) {
                                 fontWeight: 600,
                                 fontFamily: bodyFont
                             }}>
-                                {'쿠퐁온라인의 새로운 소식과 소통의 공간입니다.'}
+                                {'디시베트남의 새로운 소식과 소통의 공간입니다.'}
                             </p>
                         </div>
                         
@@ -564,7 +564,7 @@ export default function BoardClient({ initialSelectedPost }) {
             <div style={{ padding: '20px' }}>
                 <div style={{ minHeight: '300px' }}>
                     <div style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', border: 0 }}>
-                        <h2>쿠퐁온라인 공지사항 및 최신 뉴스 목록</h2>
+                        <h2>디시베트남 공지사항 및 최신 뉴스 목록</h2>
                         <p>베트남 호치민, 푸미흥 지역의 다양한 업체 소식과 이벤트, 서비스 업데이트 정보를 확인하세요.</p>
                     </div>
 

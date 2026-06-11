@@ -123,7 +123,7 @@ export default function LoginPage() {
                     fontSize: '2rem', fontWeight: 900, color: 'white',
                     letterSpacing: '-1px', marginBottom: '8px'
                 }}>
-                    쿠퐁<span style={{ color: '#818cf8' }}>온라인</span>
+                    디시<span style={{ color: '#818cf8' }}>베트남</span>
                 </div>
                 <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>
                     베트남 교민 할인 쿠폰 플랫폼
@@ -357,7 +357,7 @@ export default function LoginPage() {
             </motion.div>
 
             <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.78rem', marginTop: '24px', textAlign: 'center' }}>
-                로그인 시 쿠퐁온라인 이용약관에 동의합니다.
+                로그인 시 디시베트남 이용약관에 동의합니다.
             </p>
         </div>
     );
