@@ -85,7 +85,7 @@ export default function TermsPage() {
                             제1조 (목적)
                         </h4>
                         <p style={{ color: '#64748b', marginBottom: '24px', fontSize: '0.95rem' }}>
-                            본 약관은 STAR.KV CONSTRUCTION CONSULTING COMPANY LIMITED(이하 "회사")가 운영하는 "디시베트남(www.dcvietnam.com)"(이하 "서비스")을 이용함에 있어 회사와 회원(이용자 및 가맹점) 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
+                            본 약관은 STAR.KV CONSTRUCTION CONSULTING COMPANY LIMITED(이하 "회사")가 운영하는 "디시베트남(dcvietnam.vercel.app)"(이하 "서비스")을 이용함에 있어 회사와 회원(이용자 및 가맹점) 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
                         </p>
 
                         <h4 style={{
