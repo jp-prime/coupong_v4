@@ -97,12 +97,11 @@ const HeaderV2 = ({ searchQuery, setSearchQuery, isTransparent = false }) => {
                     window.location.href = '/';
                 }} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
                     <img 
-                        src="https://i.ibb.co/hJYqtVFd/image.png" 
-                        alt="Coupong Online Logo" 
+                        src="/dcvietnam-logo.png" 
+                        alt="DC Vietnam Logo" 
                         style={{ 
                             height: '27px',
-                            objectFit: 'contain',
-                            filter: isTransparent ? 'brightness(0) invert(1)' : 'none'
+                            objectFit: 'contain'
                         }} 
                     />
                 </div>
