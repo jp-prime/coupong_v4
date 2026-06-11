@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SNS/카카오톡 공유 썸네일 & 메타데이터 -->
+    <meta property="og:title" content="가성비최고 인생 스니커즈 *3일번개장터*오픈">
+    <meta property="og:description" content="행사장:시닉벨리1차 F동 VINE카페앞">
+    <meta property="og:image" content="https://i.ibb.co/1JnFNX6n/z7607512052894-82b40689934338e21906dfb52344d482.jpg">
+    <meta property="og:type" content="website">
+
+    <title>📢 단 72시간! Barecup '미친 세일' START!</title>
+    <meta name="description" content="가성비최고 인생 스니커즈 *3일번개장터*오픈 - 정가 12만원의 프리미엄 슈즈를 수출 단가보다 저렴한 가격으로!">
+
+    <!-- Pretendard Web Font -->
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+    <style>
+        :root {
+            --primary: #FF3366;
+            --primary-dark: #cc0033;
+            --bg-base: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--surface);
+            min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
+            position: relative;
+            padding-bottom: 100px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 50px 24px;
+            text-align: center;
+            border-radius: 0 0 40px 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 51, 102, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+            animation: pulseGlow 4s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fca5a5;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            line-height: 1.25;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+            text-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            color: #cbd5e1;
+            font-weight: 500;
+            word-break: keep-all;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 24px 24px 10px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            padding: 16px 20px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+            border: 1px solid #f1f5f9;
+        }
+
+        .feature-icon-wrapper {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            margin-right: 20px;
+        }
+
+        .icon-bg-1 {
+            background: #fff1f2;
+        }
+
+        .icon-bg-2 {
+            background: #fdf4ff;
+        }
+
+        .icon-bg-3 {
+            background: #f8fafc;
+        }
+
+        /* 이미지에 맞춘 배경톤 */
+
+        .feature-text h3 {
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: #1e293b;
+            margin-bottom: 6px;
+        }
+
+        .feature-text p {
+            font-size: 0.95rem;
+            color: #64748b;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        /* Description Box */
+        .desc-box {
+            background: #e0f2fe;
+            /* 옅은 하늘색 (이미지 유사) */
+            margin: 10px 24px 40px;
+            padding: 36px 24px;
+            border-radius: 30px;
+            text-align: center;
+        }
+
+        .desc-box p {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.6;
+            word-break: keep-all;
+            margin-bottom: 16px;
+        }
+
+        .desc-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .desc-box .highlight {
+            color: #0284c7;
+            /* 더 진한 파란색 포인트 */
+            font-weight: 900;
+        }
+
+        /* Info List */
+        .info-list {
+            padding: 0 24px 40px;
+        }
+
+        .info-item {
+            display: flex;
+            padding: 16px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .info-label {
+            width: 80px;
+            font-weight: 800;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .info-value {
+            flex: 1;
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        .info-value.price {
+            color: var(--primary);
+            font-size: 1.1rem;
+            font-weight: 900;
+        }
+
+        /* Gallery */
+        .gallery-wrap {
+            padding: 0 24px 40px;
+        }
+
+        .gallery-title {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .gallery-main-view {
+            margin-bottom: 12px;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            background: #fff;
+        }
+
+        .gallery-main-view img {
+            width: 100%;
+            height: 320px;
+            /* 메인 이미지 높이 */
+            object-fit: cover;
+            display: block;
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        .gallery-thumbnails {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding-bottom: 8px;
+            /* 스크롤바 영역 확보 */
+        }
+
+        /* 썸네일 가로 스크롤바 디자인 */
+        .gallery-thumbnails::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .gallery-thumbnails::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .gallery-thumbnails .thumb {
+            flex: 0 0 70px;
+            /* 썸네일 너비를 70px로 고정하여 가로 스크롤 유도 */
+            height: 70px;
+            object-fit: cover;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            opacity: 0.6;
+        }
+
+        .gallery-thumbnails .thumb:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .gallery-thumbnails .thumb.active {
+            border-color: var(--primary);
+            opacity: 1;
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(255, 51, 102, 0.2);
+        }
+
+        /* Floating CTA Bottom */
+        .cta-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #f1f5f9;
+            z-index: 100;
+        }
+
+        .cta-btn {
+            background: linear-gradient(90deg, var(--primary) 0%, #ff6b4a 100%);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            font-size: 1.15rem;
+            font-weight: 900;
+            padding: 18px 0;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 560px;
+            box-shadow: 0 10px 25px rgba(255, 51, 102, 0.3);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: pulseBtn 2s infinite;
+        }
+
+        .cta-btn:active {
+            transform: scale(0.98);
+        }
+
+        @keyframes pulseBtn {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(255, 51, 102, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 51, 102, 0);
+            }
+        }
+
+        /* Utility */
+        .strike {
+            text-decoration: line-through;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-right: 8px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Hero -->
+        <header class="hero">
+            <div class="badge">📢 단 72시간 특가</div>
+            <h1>Barecup<br><span>'번개 세일'</span> START!</h1>
+            <p>한국수출 고급 스니커즈!<br>지금 안 사면 후회할 역대급 반짝 세일! 🏃‍♂️💨<br>단 3일간, 시닉벨리1차 I동 VINE&VEHEEKERY CAFE 앞</p>
+        </header>
+        <!-- Gallery -->
+        <section class="gallery-wrap">
+            <h2 class="gallery-title">Product Gallery</h2>
+
+            <div class="gallery-main-view">
+                <!-- 큰 메인 이미지 영역 (초기값: 첫번째 이미지) -->
+                <img id="main-product-img"
+                    src="https://i.ibb.co/tP41CKbk/z7607510253393-8cc65b2ed44ca223bf7bdd673ae2c8cb.jpg"
+                    alt="Main Product View">
+            </div>
+
+            <div class="gallery-thumbnails">
+                <!-- 10개의 썸네일 영역 (가로 스크롤) -->
+                <img class="thumb active"
+                    src="https://i.ibb.co/PZxjg6z2/z7607510237082-4ba4689cc439371d4794279d5a5a6b0e.jpg" alt="Thumb 1"
+                    onclick="changeMainImg(this)">
+                <img class="thumb" src="https://i.ibb.co/1JnFNX6n/z7607512052894-82b40689934338e21906dfb52344d482.jpg"
+                    alt="Thumb 2" onclick="changeMainImg(this)">
+                <img class="thumb" src="https://i.ibb.co/qMNWkjJb/z7607510266712-30d3b25cb53c9b127bff856893a4f6eb.jpg"
+                    alt="Thumb 3" onclick="changeMainImg(this)">
+                <img class="thumb" src="https://i.ibb.co/Mk4RmgDF/z7607510265884-148f2ddd8f8b5894526af5df05574500.jpg"
+                    alt="Thumb 4" onclick="changeMainImg(this)">
+                <img class="thumb" src="https://i.ibb.co/SXCgR91Q/z7607510227599-89c1615d56386c734835487316ddf531.jpg"
+                    alt="Thumb 5" onclick="changeMainImg(this)">
+                <img class="thumb" src="https://i.ibb.co/9m6mktRp/z7607512054745-efb7ad01f3102c97915e618c04bea04a.jpg"
+                    alt="Thumb 6" onclick="changeMainImg(this)">
+                <img class="thumb" src="https://i.ibb.co/PZT9wHVG/z7607510236771-a2609ab7bfd2a0b03113da0c4b80bca9.jpg"
+                    alt="Thumb 7" onclick="changeMainImg(this)">
+                <img class="thumb" src="https://i.ibb.co/tP41CKbk/z7607510253393-8cc65b2ed44ca223bf7bdd673ae2c8cb.jpg"
+                    alt="Thumb 8" onclick="changeMainImg(this)">
+                <img class="thumb" src="https://i.ibb.co/kswLTkRK/z7607510244129-b92c33abea92f14fb653132d58deb814.jpg"
+                    alt="Thumb 9" onclick="changeMainImg(this)">
+                <img class="thumb" src="https://i.ibb.co/rRyK7SHp/z7607510246791-689b8ab5768d05da587fa72f63cdd6d2.jpg"
+                    alt="Thumb 10" onclick="changeMainImg(this)">
+            </div>
+        </section>
+        <!-- Features -->
+        <section class="features">
+            <div class="feature-item">
+                <div class="feature-icon-wrapper icon-bg-1">🌬️</div>
+                <div class="feature-text">
+                    <h3>여름에도 시원하게!</h3>
+                    <p>통기성 끝판왕 Wool 소재 갑피 적용</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon-wrapper icon-bg-2">🌿</div>
+                <div class="feature-text">
+                    <h3>발냄새 걱정 NO!</h3>
+                    <p>항균 효과 확실한 천연 코르크 깔창</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon-wrapper icon-bg-3">☔</div>
+                <div class="feature-text">
+                    <h3>비가 와도 안심!</h3>
+                    <p>초경량 무게 + 강력한 논슬립(Non-slip) 바닥창</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Description -->
+        <section class="desc-box">
+            <p>
+                정가 12만원의 프리미엄 슈즈를 <br>
+                <span class="highlight">수출 단가보다 저렴한 가격</span>으로 가져갈 수 있는 단 3일의 기회.
+            </p>
+            <p>
+                내 발에 꼭 맞는 사이즈(230~280mm)가<br>
+                품절되기 전에 빠르게 득템하세요!
+            </p>
+        </section>
+
+        <!-- Info -->
+        <section class="info-list">
+            <div class="info-item">
+                <div class="info-label">📍 행사기간</div>
+                <div class="info-value">3월 13일(금) ~ 15일(일)<br><span style="color:var(--text-muted); font-size:0.85rem">딱
+                        3일간만 진행 (재고 소진 시 조기마감)</span></div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">📍 오픈시간</div>
+                <div class="info-value">아침 8시 ~ 저녁 8시</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">📍 행사장소</div>
+                <div class="info-value" style="font-weight: 900; color: #0ea5e9;">Scenic Valley 1차 I동 VINE&VEHEEKERY CAFE앞</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">📍 가격</div>
+                <div class="info-value price">
+                    <span class="strike">120,000원</span> 700,000동
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">📍 구매방법</div>
+                <div class="info-value">행사장 방문 구매 (또는 하단 문의)</div>
+            </div>
+        </section>
+
+
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="cta-bottom">
+        <a href="tel:0932441042" class="cta-btn" style="display: block;">
+            구매문의전화 : 0932441042
+        </a>
+    </div>
+
+    <script>
+        // 갤러리 메인 이미지 변경 스크립트
+        function changeMainImg(element) {
+            // 모든 썸네일에서 active 클래스 제거
+            const thumbnails = document.querySelectorAll('.thumb');
+            thumbnails.forEach(thumb => thumb.classList.remove('active'));
+
+            // 클릭한 썸네일에 활성화 표시 추가
+            element.classList.add('active');
+
+            // 메인 이미지의 src를 부드럽게 변경
+            const mainImg = document.getElementById('main-product-img');
+
+            // 투명도를 줬다가 다시 보이게 해서 부드러운 전환 효과(옵션)
+            mainImg.style.opacity = 0;
+            setTimeout(() => {
+                mainImg.src = element.src;
+                mainImg.style.opacity = 1;
+            }, 150);
+        }
+    </script>
+
+</body>
+
+</html>
+```

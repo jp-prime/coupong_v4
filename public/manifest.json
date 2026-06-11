@@ -1,0 +1,16 @@
+{
+    "short_name": "COUPONG",
+    "name": "COUPONG - 베트남 업소 할인쿠폰 서비스",
+    "icons": [
+        {
+            "src": "vite.svg",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ],
+    "start_url": "./",
+    "display": "standalone",
+    "theme_color": "#121212",
+    "background_color": "#121212"
+}

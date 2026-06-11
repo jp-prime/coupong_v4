@@ -1,0 +1,56 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # ✅ /v2 또는 /v2/ 로 들어오는 구 URL을 루트(/)로 301 영구 리다이렉트
+  RewriteRule ^v2/?$ / [R=301,L]
+  RewriteRule ^v2/(.*)$ /$1 [R=301,L]
+
+  # ✅ 기존 PHP 파일 요청 시 처리 (로봇인 경우에만 seo.php로 연결)
+  RewriteCond %{HTTP_USER_AGENT} (googlebot|google-inspectiontool|bingbot|slurp|baiduspider|yandex|adsbot|mediapartners-google) [NC]
+  RewriteRule ^(store|view|index|share)\.php$ legacy_php/seo.php [B,L,QSA]
+ 
+  # ✅ 검색 엔진 봇 감지 및 SEO용 php 연결 (RewriteCond 직접 감지 방식으로 호환성 극대화)
+  RewriteCond %{HTTP_USER_AGENT} (googlebot|google-inspectiontool|bingbot|slurp|baiduspider|yandex|adsbot|mediapartners-google|facebookexternalhit|twitterbot|kakaotalk-scrap|yeti) [NC]
+  RewriteRule ^((ko|vi|en|zh-CN)/)?mini-home/(.*)$ /legacy_php/seo.php?type=mini-home&id=$3 [B,L,QSA]
+  
+  RewriteCond %{HTTP_USER_AGENT} (googlebot|google-inspectiontool|bingbot|slurp|baiduspider|yandex|adsbot|mediapartners-google|facebookexternalhit|twitterbot|kakaotalk-scrap|yeti) [NC]
+  RewriteRule ^((ko|vi|en|zh-CN)/)?store/(.*)$ /legacy_php/seo.php?type=store&id=$3 [B,L,QSA]
+  
+  RewriteCond %{HTTP_USER_AGENT} (googlebot|google-inspectiontool|bingbot|slurp|baiduspider|yandex|adsbot|mediapartners-google|facebookexternalhit|twitterbot|kakaotalk-scrap|yeti) [NC]
+  RewriteRule ^((ko|vi|en|zh-CN)/)?promo/(.*)$ /legacy_php/seo.php?type=promo&id=$3 [B,L,QSA]
+  
+  RewriteCond %{HTTP_USER_AGENT} (googlebot|google-inspectiontool|bingbot|slurp|baiduspider|yandex|adsbot|mediapartners-google|facebookexternalhit|twitterbot|kakaotalk-scrap|yeti) [NC]
+  RewriteRule ^((ko|vi|en|zh-CN)/)?board/(.*)$ /legacy_php/seo.php?type=board&id=$3 [B,L,QSA]
+  
+  RewriteCond %{HTTP_USER_AGENT} (googlebot|google-inspectiontool|bingbot|slurp|baiduspider|yandex|adsbot|mediapartners-google|facebookexternalhit|twitterbot|kakaotalk-scrap|yeti) [NC]
+  RewriteRule ^((ko|vi|en|zh-CN)/)?go/(.*)$ /legacy_php/seo.php?type=go&id=$3 [B,L,QSA]
+  
+  RewriteCond %{HTTP_USER_AGENT} (googlebot|google-inspectiontool|bingbot|slurp|baiduspider|yandex|adsbot|mediapartners-google|facebookexternalhit|twitterbot|kakaotalk-scrap|yeti) [NC]
+  RewriteRule ^((ko|vi|en|zh-CN)/)?(discount-mall|localinfo|printing|market|partner-apply-v2|partner-apply|partner-apply2|promos|webzine|community|service-intro|privacy|terms)/?$ /legacy_php/seo.php?type=$3 [B,L,QSA]
+
+  # ✅ SPA 라우팅: 실제 파일이나 디렉토리가 아니면 index.html로 전송
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-l
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# ✅ Gzip Compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json
+</IfModule>
+
+# ✅ Browser Caching
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+</IfModule>
