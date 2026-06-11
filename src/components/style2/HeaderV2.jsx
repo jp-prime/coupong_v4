@@ -101,7 +101,8 @@ const HeaderV2 = ({ searchQuery, setSearchQuery, isTransparent = false }) => {
                         alt="DC Vietnam Logo" 
                         style={{ 
                             height: '27px',
-                            objectFit: 'contain'
+                            objectFit: 'contain',
+                            filter: isTransparent ? 'none' : 'invert(1)'
                         }} 
                     />
                 </div>
