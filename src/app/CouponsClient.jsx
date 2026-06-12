@@ -56,10 +56,11 @@ export default function CouponsClient({ initialStores }) {
                     background: '#09090b',
                     boxShadow: '0 12px 28px rgba(0,0,0,0.12)',
                     paddingBottom: '20px',
-                    zIndex: 100
+                    zIndex: 100,
+                    minHeight: windowWidth < 640 ? '308px' : '324px' // Reserved height to prevent CLS
                 }}>
-                    <div style={{ position: 'relative', zIndex: 1 }}>
-                        <div style={{ position: 'relative', zIndex: 10 }}>
+                    <div style={{ position: 'relative', zIndex: 1, minHeight: windowWidth < 640 ? '288px' : '304px' }}>
+                        <div style={{ position: 'relative', zIndex: 10, height: '64px' }}>
                             <HeaderV2 isTransparent={true} />
                         </div>
                         <HeroSliderV2 isAdmin={false} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isMerged={true} />

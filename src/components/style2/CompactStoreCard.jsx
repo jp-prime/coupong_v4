@@ -8,18 +8,21 @@ import { useStoreHelpers } from '../../hooks/useStoreHelpers';
 import { useTranslation } from 'react-i18next';
 import { playTickSound } from '../../utils/sound';
 
-const CardThumbnail = ({ store, fixImageUrl, alt }) => {
+const CardThumbnail = ({ store, fixImageUrl, alt, index }) => {
     const imageUrl = React.useMemo(() => {
         const rawUrl = store.image || (store.images && store.images[0]) || '';
         return fixImageUrl(rawUrl);
     }, [store, fixImageUrl]);
+
+    const isPriority = index < 4; // Prioritize top 4 above-the-fold images
 
     return (
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
             <img
                 src={imageUrl}
                 alt={alt}
-                loading="lazy"
+                loading={isPriority ? undefined : "lazy"}
+                fetchPriority={isPriority ? "high" : "low"}
                 style={{
                     position: 'absolute',
                     top: 0,
