@@ -1,3 +1,5 @@
+import React, { memo } from 'react';
+
 function convertTableToHtml(tableLines) {
     if (tableLines.length < 2) return tableLines.join('\n');
     const secondLine = tableLines[1].trim();
