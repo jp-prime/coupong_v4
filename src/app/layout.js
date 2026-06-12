@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "디시베트남 | 스마트한 베트남 생활의 시작",
-  description: "베트남 호치민의 모든 혜택. 맛집, 마사지, 가라오케 등 엄선된 업체들의 할인 쿠폰을 확인하세요.",
+  title: "디시베트남 | 베트남 업소 디시 할인쿠폰 & 업소 무료 홍보 플랫폼",
+  description: "베트남 호치민, 하노이의 맛집, 마사지, 가라오케 등 다양한 베트남 업소 정보와 할인 쿠폰, 그리고 업주를 위한 무료 홍보 혜택을 제공합니다.",
   verification: {
     google: [
       "bYbSYKYBfDFbFydBYz31LI-Rt27jt-KgUIPlFHvHCvE",
