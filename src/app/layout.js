@@ -24,7 +24,8 @@ export const metadata = {
     google: [
       "bYbSYKYBfDFbFydBYz31LI-Rt27jt-KgUIPlFHvHCvE",
       "StORgx1HoF-EJ_mlvFmry94i4NmMrgbQSVn1DZeMsmo",
-      "zPp0TS-92cooJWfCGnDEy2TOlK_gOqp2ka28r4-DxpE"
+      "zPp0TS-92cooJWfCGnDEy2TOlK_gOqp2ka28r4-DxpE",
+      "8psJa4fIznSgnvvLemUthaB77DWWYUifJJh4M93e5dg"
     ],
   },
 };
