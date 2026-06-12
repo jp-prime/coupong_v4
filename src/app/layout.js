@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "비나통 | 베트남 할인 쿠폰 혜택",
-  description: "베트남 호치민, 다낭 로컬 맛집 정보와 최신 할인 쿠폰 정보 제공!",
+  description: "호치민 로컬 맛집 정보, 마사지, 이발소, 가라오케, 할인 쿠폰 제공! 베트남 여행은 비나통으로 통한다.",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -24,7 +24,7 @@ export const metadata = {
     type: "website",
     url: "https://www.vinatong.store",
     title: "비나통 | 베트남 할인 쿠폰 혜택",
-    description: "베트남 호치민, 다낭 로컬 맛집 정보와 최신 할인 쿠폰 정보 제공!",
+    description: "호치민 로컬 맛집 정보, 마사지, 이발소, 가라오케, 할인 쿠폰 제공! 베트남 여행은 비나통으로 통한다.",
     siteName: "비나통 (VinaTong)",
     images: [
       {
