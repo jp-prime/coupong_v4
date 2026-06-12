@@ -17,7 +17,7 @@ export const metadata = {
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
-    apple: "/dcvietnam-logo.png",
+    apple: "/비나통-vinatong-로고.png",
   },
   manifest: "/manifest.json",
   verification: {

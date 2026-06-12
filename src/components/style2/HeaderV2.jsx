@@ -96,15 +96,15 @@ const HeaderV2 = ({ searchQuery, setSearchQuery, isTransparent = false }) => {
                     StoreService.clearCache();
                     window.location.href = '/';
                 }} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-                    <div style={{
-                        fontSize: '22px',
-                        fontWeight: '800',
-                        color: isTransparent ? '#ffffff' : '#6366f1',
-                        letterSpacing: '-0.5px',
-                        fontFamily: 'system-ui, -apple-system, sans-serif'
-                    }}>
-                        VinaTong
-                    </div>
+                    <img 
+                        src="/비나통-vinatong-로고.png" 
+                        alt="비나통-vinatong.store" 
+                        style={{ 
+                            height: '27px',
+                            objectFit: 'contain',
+                            filter: isTransparent ? 'none' : 'invert(1)'
+                        }} 
+                    />
                 </div>
 
                 <div style={{ flex: 1 }} />
