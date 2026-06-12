@@ -779,12 +779,12 @@ export default function BoardClient({ initialSelectedPost }) {
                             </div>
                             <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
                                 {selectedPost.images && selectedPost.images.length > 0 && (
-                                    <div style={{ width: '100%', height: '500px', borderRadius: '20px', overflow: 'hidden', marginBottom: '20px' }}>
+                                    <div style={{ width: '100%', borderRadius: '20px', overflow: 'hidden', marginBottom: '20px' }}>
                                         <img 
                                             src={fixImageUrl(selectedPost.images[0])} 
                                             alt="" 
                                             referrerPolicy="no-referrer" 
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                            style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover' }} 
                                         />
                                     </div>
                                 )}
