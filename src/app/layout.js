@@ -14,6 +14,12 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "디시베트남 | 베트남 할인 쿠폰 혜택",
   description: "마사지, 이발소, 가라오케, 로컬 맛집 정보와 최신 할인 쿠폰 제공! 베트남 여행을 더 완벽하고 저렴하게 즐기는 방법. 지금 방문하고 무료 혜택을 누리세요.",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/dcvietnam-logo.png",
+  },
+  manifest: "/manifest.json",
   verification: {
     google: [
       "bYbSYKYBfDFbFydBYz31LI-Rt27jt-KgUIPlFHvHCvE",

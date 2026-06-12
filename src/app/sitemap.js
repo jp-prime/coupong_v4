@@ -6,7 +6,7 @@ import { collection, getDocs } from 'firebase/firestore';
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap() {
-    const baseUrl = 'https://coupong.online';
+    const baseUrl = 'https://dcvietnam.store';
 
     // Static URLs
     const routes = [
