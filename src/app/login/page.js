@@ -357,7 +357,7 @@ export default function LoginPage() {
             </motion.div>
 
             <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.78rem', marginTop: '24px', textAlign: 'center' }}>
-                로그인 시 디시베트남 이용약관에 동의합니다.
+                로그인 시 비나통 이용약관에 동의합니다.
             </p>
         </div>
     );

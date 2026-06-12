@@ -11,7 +11,7 @@ export async function generateMetadata({ searchParams }) {
 
     if (!id && !slug) {
         return {
-            title: '디시베트남 커뮤니티 | 베트남 호치민 라이프 소식',
+            title: '비나통 커뮤니티 | 베트남 호치민 라이프 소식',
             description: '베트남 호치민, 푸미흥 지역의 실시간 자유게시판 및 커뮤니티 공간입니다. 맛집 후기 및 일상 이야기를 함께 나눠보세요.',
             alternates: {
                 canonical: 'https://coupong.online/board',
@@ -29,8 +29,8 @@ export async function generateMetadata({ searchParams }) {
             const pageUrl = `https://coupong.online/board?slug=${encodeURIComponent(slug)}`;
 
             if (title) {
-                const titleStr = `${title} | 디시베트남 커뮤니티`;
-                const descStr = description ? String(description).substring(0, 150) : '디시베트남 커뮤니티 최신 게시글 내용';
+                const titleStr = `${title} | 비나통 커뮤니티`;
+                const descStr = description ? String(description).substring(0, 150) : '비나통 커뮤니티 최신 게시글 내용';
                 return {
                     title: titleStr,
                     description: descStr,
@@ -41,7 +41,7 @@ export async function generateMetadata({ searchParams }) {
                         title: titleStr,
                         description: descStr,
                         images: [{ url: ogImage, width: 800, height: 800, alt: title }],
-                        siteName: '디시베트남 (DC VIETNAM)',
+                        siteName: '비나통 (VinaTong)',
                     },
                 };
             }
@@ -53,8 +53,8 @@ export async function generateMetadata({ searchParams }) {
     try {
         const post = await QnaService.getPostById(id);
         if (post) {
-            const titleStr = `${post.title} | 디시베트남 커뮤니티`;
-            const descStr = `${post.content ? post.content.substring(0, 150) : '디시베트남 커뮤니티 최신 게시글 내용'}`;
+            const titleStr = `${post.title} | 비나통 커뮤니티`;
+            const descStr = `${post.content ? post.content.substring(0, 150) : '비나통 커뮤니티 최신 게시글 내용'}`;
             const pageUrl = `https://coupong.online/board?id=${id}`;
             const ogImage = post.images && post.images[0] ? post.images[0] : 'https://coupong.online/index512.png';
 
@@ -77,7 +77,7 @@ export async function generateMetadata({ searchParams }) {
                             alt: post.title,
                         }
                     ],
-                    siteName: '디시베트남 (DC VIETNAM)',
+                    siteName: '비나통 (VinaTong)',
                 },
                 twitter: {
                     card: 'summary_large_image',
@@ -92,7 +92,7 @@ export async function generateMetadata({ searchParams }) {
     }
 
     return {
-        title: '디시베트남 커뮤니티',
+        title: '비나통 커뮤니티',
         description: '베트남 호치민, 푸미흥 자유게시판'
     };
 }
