@@ -13,13 +13,28 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "비나통 | 베트남 할인 쿠폰 혜택",
-  description: "마사지, 이발소, 가라오케, 로컬 맛집 정보와 최신 할인 쿠폰 제공! 베트남 여행을 더 완벽하고 저렴하게 즐기는 방법. 지금 방문하고 무료 혜택을 누리세요.",
+  description: "베트남 호치민, 다낭 로컬 맛집 정보와 최신 할인 쿠폰 정보 제공!",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
     apple: "/VinaTong.png",
   },
   manifest: "/manifest.json",
+  openGraph: {
+    type: "website",
+    url: "https://www.vinatong.store",
+    title: "비나통 | 베트남 할인 쿠폰 혜택",
+    description: "베트남 호치민, 다낭 로컬 맛집 정보와 최신 할인 쿠폰 정보 제공!",
+    siteName: "비나통 (VinaTong)",
+    images: [
+      {
+        url: "https://www.vinatong.store/VinaTong.png",
+        width: 800,
+        height: 800,
+        alt: "비나통 로고"
+      }
+    ]
+  },
   verification: {
     google: [
       "bYbSYKYBfDFbFydBYz31LI-Rt27jt-KgUIPlFHvHCvE",

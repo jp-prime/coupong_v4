@@ -8,4 +8,4 @@ Disallow: /studio
 Disallow: /studio/
 
 # V2 전용 사이트맵
-Sitemap: https://dcvietnam.store/sitemap.xml
+Sitemap: https://www.vinatong.store/sitemap.xml
