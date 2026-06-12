@@ -778,8 +778,8 @@ export default function BoardClient({ initialSelectedPost }) {
                                 )}
                             </div>
                             <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
-                                {selectedPost.category === '가맹점 정보' && selectedPost.images && selectedPost.images.length > 0 && (
-                                    <div style={{ width: '100%', height: '180px', borderRadius: '16px', overflow: 'hidden', marginBottom: '20px' }}>
+                                {selectedPost.images && selectedPost.images.length > 0 && (
+                                    <div style={{ width: '100%', height: '500px', borderRadius: '20px', overflow: 'hidden', marginBottom: '20px' }}>
                                         <img 
                                             src={fixImageUrl(selectedPost.images[0])} 
                                             alt="" 

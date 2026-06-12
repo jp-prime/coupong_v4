@@ -1,10 +1,87 @@
-import React, { memo } from 'react';
+function convertTableToHtml(tableLines) {
+    if (tableLines.length < 2) return tableLines.join('\n');
+    const secondLine = tableLines[1].trim();
+    const isDelimiter = /^\|(\s*:?-+:?\s*\|)+$/.test(secondLine);
+    if (!isDelimiter) return tableLines.join('\n');
+
+    const headers = tableLines[0]
+        .split('|')
+        .slice(1, -1)
+        .map(h => h.trim());
+
+    const alignments = secondLine
+        .split('|')
+        .slice(1, -1)
+        .map(col => {
+            const trimmed = col.trim();
+            const left = trimmed.startsWith(':');
+            const right = trimmed.endsWith(':');
+            if (left && right) return 'center';
+            if (right) return 'right';
+            return 'left';
+        });
+
+    let html = '<div class="table-responsive"><table class="promo-table"><thead><tr>';
+    headers.forEach((h, idx) => {
+        const align = alignments[idx] || 'left';
+        html += `<th style="text-align: ${align}">${h}</th>`;
+    });
+    html += '</tr></thead><tbody>';
+
+    for (let r = 2; r < tableLines.length; r++) {
+        const cols = tableLines[r]
+            .split('|')
+            .slice(1, -1)
+            .map(c => c.trim());
+        html += '<tr>';
+        headers.forEach((_, idx) => {
+            const colVal = cols[idx] || '';
+            const align = alignments[idx] || 'left';
+            html += `<td style="text-align: ${align}">${colVal}</td>`;
+        });
+        html += '</tr>';
+    }
+    html += '</tbody></table></div>';
+    return html;
+}
+
+function parseMarkdownTables(text) {
+    if (!text) return '';
+    const lines = text.split('\n');
+    let inTable = false;
+    let tableLines = [];
+    const processedLines = [];
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line.startsWith('|') && line.endsWith('|')) {
+            if (!inTable) {
+                inTable = true;
+                tableLines = [line];
+            } else {
+                tableLines.push(line);
+            }
+        } else {
+            if (inTable) {
+                processedLines.push(convertTableToHtml(tableLines));
+                inTable = false;
+                tableLines = [];
+            }
+            processedLines.push(lines[i]);
+        }
+    }
+    if (inTable) {
+        processedLines.push(convertTableToHtml(tableLines));
+    }
+    return processedLines.join('\n');
+}
 
 const RenderWithShortcodes = memo(({ text, navigate, postImgs, linkedStore }) => {
     if (!text) return null;
 
+    const parsedText = parseMarkdownTables(text);
     // 숏코드 분리 로직 (기존 PromoDetail에서 가져옴)
-    const parts = text.split(/(\[img\d+\]|cp\[[^\]]+\]|\[cp\]|bt\[[^\]]+\]|\[map\]|map\[[^\]]+\])/gi);
+    const parts = parsedText.split(/(\[img\d+\]|cp\[[^\]]+\]|\[cp\]|bt\[[^\]]+\]|\[map\]|map\[[^\]]+\])/gi);
     const rendered = [];
 
     parts.forEach((part, idx) => {
@@ -231,6 +308,12 @@ const RenderWithShortcodes = memo(({ text, navigate, postImgs, linkedStore }) =>
                 .promo-li-sub { padding-left: 1.2rem !important; margin-left: 1rem !important; color: #556575; font-weight: 400; margin-bottom: 2px !important; }
                 .promo-li-sub::before { content: "◦"; position: absolute !important; left: 0 !important; top: -0.2em !important; color: #94a3b8 !important; font-size: 1.3em !important; }
                 .promo-content-wrapper { user-select: text !important; -webkit-user-select: text !important; }
+                .table-responsive { width: 100%; overflow-x: auto; margin: 20px 0; border-radius: 12px; border: 1px solid #e2e8f0; }
+                .promo-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+                .promo-table th { background-color: #f8fafc; color: #475569; font-weight: 700; padding: 12px 16px; border-bottom: 2px solid #e2e8f0; }
+                .promo-table td { padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #334155; }
+                .promo-table tr:last-child td { border-bottom: none; }
+                .promo-table tr:nth-child(even) { background-color: #f8fafc; }
             `}</style>
             {rendered}
         </div>
