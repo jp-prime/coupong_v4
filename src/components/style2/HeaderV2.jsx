@@ -97,12 +97,11 @@ const HeaderV2 = ({ searchQuery, setSearchQuery, isTransparent = false }) => {
                     window.location.href = '/';
                 }} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
                     <img 
-                        src="/비나통-vinatong-로고.png" 
+                        src={isTransparent ? "/VinaTong.png" : "/VinaTong2.png"} 
                         alt="비나통-vinatong.store" 
                         style={{ 
                             height: '27px',
-                            objectFit: 'contain',
-                            filter: isTransparent ? 'none' : 'invert(1)'
+                            objectFit: 'contain'
                         }} 
                     />
                 </div>
