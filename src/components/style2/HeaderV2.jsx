@@ -100,7 +100,7 @@ const HeaderV2 = ({ searchQuery, setSearchQuery, isTransparent = false }) => {
                         src="/VinaTong.png" 
                         alt="비나통-vinatong.store" 
                         style={{ 
-                            height: '27px',
+                            height: '31px',
                             objectFit: 'contain',
                             filter: isTransparent ? 'none' : 'brightness(0)'
                         }} 
