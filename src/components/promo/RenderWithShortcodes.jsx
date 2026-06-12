@@ -97,7 +97,7 @@ const RenderWithShortcodes = memo(({ text, navigate, postImgs, linkedStore }) =>
             if (imgUrl) {
                 rendered.push(
                     <div key={idx} style={{ width: '100%', margin: '20px 0', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
-                        <img src={imgUrl} alt={`content-${imgIdx}`} style={{ width: '100%', display: 'block' }} />
+                        <img src={imgUrl} alt={`content-${imgIdx}`} style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover', display: 'block', borderRadius: '20px' }} />
                     </div>
                 );
             }
@@ -179,8 +179,8 @@ const RenderWithShortcodes = memo(({ text, navigate, postImgs, linkedStore }) =>
                     __html: part
                         .replace(/\r\n/g, '\n') // 윈도우 캐리지 리턴(\r\n)을 일괄 \n으로 치환하여 매칭 오류 차단
                         // 0-0. 마크다운 이미지 링크 및 링크 처리
-                        .replace(/\[\!\s*\[([^\]]*)\]\(([^)]+)\)\s*\]\(([^)]+)\)/g, '<a href="$3" target="_blank" class="promo-link-img"><img src="$2" alt="$1" style="max-width: 100%; height: auto; display: block; border-radius: 12px; margin: 12px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" /></a>')
-                        .replace(/\!\s*\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; height: auto; display: block; border-radius: 12px; margin: 12px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" />')
+                        .replace(/\[\!\s*\[([^\]]*)\]\(([^)]+)\)\s*\]\(([^)]+)\)/g, '<a href="$3" target="_blank" class="promo-link-img"><img src="$2" alt="$1" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block; border-radius: 20px; margin: 12px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" /></a>')
+                        .replace(/\!\s*\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block; border-radius: 20px; margin: 12px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" />')
                         .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" class="promo-link">$1</a>')
                         // 0. $ 로 시작하는 문단(Paragraph)을 감지하여 연한 라운드 박스로 렌더링 (인용구 스타일 전에 감지)
                         .replace(/^\s*\$\s*([^\n\r]+)/gm, '<div class="promo-callout-box">$1</div>')
