@@ -207,7 +207,7 @@ const ImageSlider = ({ store, fixImageUrl, getLocalizedString, isActive }) => {
 };
 
 function GalleryTagCycler({ tags }) {
-    const [windowWidth, setWindowWidth] = React.useState(1200);
+    const [windowWidth, setWindowWidth] = React.useState(375);
     React.useEffect(() => {
         if (typeof window === "undefined") return;
         setWindowWidth(window.innerWidth);
@@ -741,7 +741,7 @@ export default function StoresV3Page({ initialStores = [] }) {
 
                                     {store.slogan && (
                                         <p style={{
-                                            fontSize: '1.2rem',
+                                            fontSize: '1.1rem',
                                             color: '#e4e4e7',
                                             margin: '0 0 6px 0',
                                             fontWeight: 900,
@@ -771,7 +771,7 @@ export default function StoresV3Page({ initialStores = [] }) {
                                                     .replace(/\[([^\]]*)\]\(([^)]+)\)/g, '$1')
                                                     .replace(/[\*_~`#\-+>]/g, '')
                                                     .trim();
-                                                return cleanDesc.length > 96 ? `${cleanDesc.substring(0, 96)}... ` : cleanDesc + " ";
+                                                return cleanDesc.length > 80 ? `${cleanDesc.substring(0, 80)}... ` : cleanDesc + " ";
                                             })()}
                                             <span style={{ color: '#f97316', textDecoration: 'underline', fontWeight: 700, cursor: 'pointer' }}>
                                                 자세히보기
