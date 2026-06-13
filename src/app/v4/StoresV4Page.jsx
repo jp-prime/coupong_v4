@@ -468,7 +468,23 @@ export default function StoresV4Page({ initialStores = [] }) {
                             }}
                         >
                             {/* 풀 스크린 비주얼 영역 (유튜브 비디오 또는 줌인 갤러리) */}
-                            <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, zIndex: 1 }}>
+                            <div 
+                                onClick={(e) => {
+                                    // 유튜브 내부 컨트롤 클릭 등 방해 없이 빈 화면 클릭 시에만 활성화하기 위해
+                                    // 비디오가 아니고 이미지 슬라이더인 경우 터치/클릭을 디테일 시트로 연결
+                                    if (!videoUrl) {
+                                        handleOpenDetailSheet(e, store);
+                                    }
+                                }}
+                                style={{ 
+                                    width: '100%', 
+                                    height: '100%', 
+                                    position: 'absolute', 
+                                    inset: 0, 
+                                    zIndex: 1,
+                                    cursor: !videoUrl ? 'pointer' : 'default'
+                                }}
+                            >
                                 {videoUrl ? (
                                     <VideoPlayer url={videoUrl} isActive={isActive} />
                                 ) : (
@@ -532,29 +548,41 @@ export default function StoresV4Page({ initialStores = [] }) {
                                     )}
                                 </div>
 
-                                <h2 style={{
-                                    fontSize: '1.9rem',
-                                    fontWeight: 950,
-                                    margin: '0 0 6px 0',
-                                    color: '#ffffff',
-                                    letterSpacing: '-0.8px',
-                                    lineHeight: '1.15',
-                                    textShadow: '0 2px 10px rgba(0,0,0,0.5)'
-                                }}>{getLocalizedString(store.name)}</h2>
+                                <h2 
+                                    onClick={(e) => handleOpenDetailSheet(e, store)}
+                                    style={{
+                                        fontSize: '1.9rem',
+                                        fontWeight: 950,
+                                        margin: '0 0 6px 0',
+                                        color: '#ffffff',
+                                        letterSpacing: '-0.8px',
+                                        lineHeight: '1.15',
+                                        textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    {getLocalizedString(store.name)}
+                                </h2>
 
                                 {store.slogan && (
-                                    <p style={{
-                                        fontSize: '1.05rem',
-                                        color: '#d4d4d8',
-                                        margin: '0 0 10px 0',
-                                        fontWeight: 800,
-                                        lineHeight: '1.35',
-                                        textShadow: '0 1px 6px rgba(0,0,0,0.4)',
-                                        fontFamily: "'Pretendard', sans-serif"
-                                    }}>{getLocalizedString(store.slogan)}</p>
+                                    <p 
+                                        onClick={(e) => handleOpenDetailSheet(e, store)}
+                                        style={{
+                                            fontSize: '1.05rem',
+                                            color: '#d4d4d8',
+                                            margin: '0 0 10px 0',
+                                            fontWeight: 800,
+                                            lineHeight: '1.35',
+                                            textShadow: '0 1px 6px rgba(0,0,0,0.4)',
+                                            fontFamily: "'Pretendard', sans-serif",
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        {getLocalizedString(store.slogan)}
+                                    </p>
                                 )}
 
-                                {/* 설명구 드래그업 유도 텍스트 */}
+                                {/* 설명구 드래그업 유도 텍스트 - 2줄 표시 */}
                                 {store.description && (
                                     <div 
                                         onClick={(e) => handleOpenDetailSheet(e, store)}
@@ -563,17 +591,20 @@ export default function StoresV4Page({ initialStores = [] }) {
                                             color: 'rgba(255,255,255,0.6)',
                                             lineHeight: '1.45',
                                             display: 'flex',
-                                            alignItems: 'center',
+                                            flexDirection: 'column',
+                                            alignItems: 'flex-start',
                                             gap: '4px',
                                             cursor: 'pointer',
                                             marginTop: '6px'
                                         }}
                                     >
                                         <span style={{
+                                            display: '-webkit-box',
+                                            WebkitLineClamp: 2,
+                                            WebkitBoxOrient: 'vertical',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap',
-                                            maxWidth: '240px'
+                                            maxHeight: '2.9em'
                                         }}>
                                             {(() => {
                                                 const rawDesc = getLocalizedString(store.description) || "";
