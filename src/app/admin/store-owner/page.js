@@ -159,9 +159,9 @@ export default function StoreOwnerDashboardPage() {
                                         {getLocalizedString(coupon.discount)}
                                     </div>
                                     <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#1e293b' }}>
-                                        {getLocalizedString(coupon.name)}
+                                        {getLocalizedString(coupon.description || coupon.name || coupon.title || '할인 쿠폰')}
                                     </div>
-                                    {coupon.limitQuantity !== undefined && (
+                                    {coupon.limitQuantity !== undefined && coupon.limitQuantity !== null && (
                                         <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '4px', fontWeight: 700 }}>
                                             잔여수량: <span style={{ color: '#0f172a', fontWeight: 900 }}>{coupon.limitQuantity}개</span>
                                         </div>
