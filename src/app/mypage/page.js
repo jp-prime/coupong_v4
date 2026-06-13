@@ -23,7 +23,7 @@ const TABS = [
 
 export default function MyPage() {
     const router = useRouter();
-    const { user, logout, loading } = useAuth();
+    const { user, logout, loading, isAdmin, isStoreOwner } = useAuth();
     const [activeTab, setActiveTab] = useState('likes');
     const [likes, setLikes] = useState([]);
     const [recentUses, setRecentUses] = useState([]);
@@ -136,7 +136,7 @@ export default function MyPage() {
                 </div>
 
                 {/* 프로필 */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', position: 'relative', zIndex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', position: 'relative', zIndex: 1, marginBottom: '16px' }}>
                     <div style={{
                         width: '68px', height: '68px', borderRadius: '22px',
                         background: photoURL ? 'transparent' : 'linear-gradient(135deg, #818cf8, #a855f7)',
@@ -150,12 +150,42 @@ export default function MyPage() {
                         }
                     </div>
                     <div style={{ flex: 1 }}>
-                        <div style={{ color: 'white', fontWeight: 900, fontSize: '1.2rem', marginBottom: '4px' }}>
+                        <div style={{ color: 'white', fontWeight: 900, fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             {displayName}
+                            {isAdmin && (
+                                <span style={{ fontSize: '0.68rem', padding: '2px 6px', borderRadius: '6px', background: 'rgba(239, 68, 68, 0.2)', color: '#f87171', fontWeight: 800 }}>운영자</span>
+                            )}
+                            {!isAdmin && isStoreOwner && (
+                                <span style={{ fontSize: '0.68rem', padding: '2px 6px', borderRadius: '6px', background: 'rgba(34, 197, 94, 0.2)', color: '#4ade80', fontWeight: 800 }}>가맹점주</span>
+                            )}
                         </div>
-                        <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.82rem' }}>{user.email}</div>
+                        <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.82rem', marginTop: '2px' }}>{user.email}</div>
                     </div>
                 </div>
+
+                {/* 관리자 / 점주 퀵 링크 */}
+                {(isAdmin || isStoreOwner) && (
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        style={{
+                            position: 'relative', zIndex: 1, marginTop: '8px', marginBottom: '8px'
+                        }}
+                    >
+                        <button
+                            onClick={() => router.push(isAdmin ? '/admin' : '/admin/store-owner')}
+                            style={{
+                                width: '100%', padding: '12px', borderRadius: '14px',
+                                background: 'linear-gradient(135deg, #6366f1, #a855f7)',
+                                border: 'none', color: 'white', fontWeight: 900, fontSize: '0.88rem',
+                                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                                boxShadow: '0 4px 14px rgba(99, 102, 241, 0.3)'
+                            }}
+                        >
+                            <Store size={16} /> {isAdmin ? '총괄 어드민 제어판 이동' : '가맹점 파트너 센터 이동'} <ChevronRight size={16} />
+                        </button>
+                    </motion.div>
+                )}
 
                 {/* 포인트 카드 */}
                 <motion.div
