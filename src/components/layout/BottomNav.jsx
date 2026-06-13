@@ -65,13 +65,14 @@ const BottomNav = () => {
 
     const isStorePage = pathname.includes('/store/');
     const isV3Page = pathname === '/v3' || pathname.startsWith('/v3/');
+    const isMiniHomePage = pathname.includes('/mini-home/');
 
     const handleNavigate = (path) => {
         playTickSound();
         router.push(path);
     };
 
-    if (isKeyboardOpen || isStorePage || isV3Page) return null;
+    if (isKeyboardOpen || isStorePage || isV3Page || isMiniHomePage) return null;
 
     return (
         <nav style={{

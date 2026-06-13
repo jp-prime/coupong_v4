@@ -119,12 +119,11 @@ export default function LoginPage() {
                 animate={{ opacity: 1, y: 0 }}
                 style={{ marginBottom: '32px', textAlign: 'center' }}
             >
-                <div style={{
-                    fontSize: '2rem', fontWeight: 900, color: 'white',
-                    letterSpacing: '-1px', marginBottom: '8px'
-                }}>
-                    디시<span style={{ color: '#818cf8' }}>베트남</span>
-                </div>
+                <img 
+                    src="/비나통_로고.png" 
+                    alt="비나통 로고" 
+                    style={{ height: '42px', width: 'auto', display: 'block', margin: '0 auto 12px', objectFit: 'contain' }} 
+                />
                 <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>
                     베트남 교민 할인 쿠폰 플랫폼
                 </p>

@@ -30,6 +30,7 @@ import {
 import { StoreService } from '../../../services/StoreService';
 import { useStoreHelpers } from '../../../hooks/useStoreHelpers';
 import { useAuth } from '../../../context/AuthContext';
+import RenderWithShortcodes from '../../../components/promo/RenderWithShortcodes';
 
 export default function PremiumMiniHome() {
     const params = useParams();
@@ -377,7 +378,7 @@ export default function PremiumMiniHome() {
             </section>
 
             {/* Compact Content Section */}
-            <motion.div style={{ y: contentY, padding: '0 5px', position: 'relative', zIndex: 50 }}>
+            <motion.div style={{ y: contentY, padding: '0 5px', position: 'relative', zIndex: 50, marginTop: '-50px' }}>
                 {/* Mini Thumbnail Carousel */}
                 {galleryArray.length > 0 && (
                     <div 
@@ -393,7 +394,8 @@ export default function PremiumMiniHome() {
                             whiteSpace: 'nowrap',
                             scrollbarWidth: 'none',
                             msOverflowStyle: 'none',
-                            marginBottom: '32px'
+                            marginBottom: '32px',
+                            marginTop: '0px'
                         }}
                     >
                         <div style={{ display: 'flex', gap: '8px', minWidth: 'max-content', padding: '0 20px' }}>
@@ -437,7 +439,7 @@ export default function PremiumMiniHome() {
                 <section className="about-details-grid" style={{ paddingBottom: '60px' }}>
                     
                     {/* Compact About / WordPress Embed */}
-                    <div style={{ 
+                    <div className="wordpress-embed-content-wrapper" style={{ 
                         background: 'rgba(255,255,255,0.02)', 
                         padding: '27px', 
                         borderRadius: '24px', 
@@ -477,9 +479,13 @@ export default function PremiumMiniHome() {
                                 }}
                             />
                         ) : (
-                            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', lineHeight: 1.7, fontWeight: 400, margin: 0, whiteSpace: 'pre-wrap' }}>
-                                {getLocalizedString(store.storeDescription) || '최상의 서비스를 제공하기 위해 노력하고 있습니다.'}
-                            </p>
+                            <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', lineHeight: 1.7, fontWeight: 400, margin: 0 }}>
+                                <RenderWithShortcodes 
+                                    text={getLocalizedString(store.storeDescription) || '최상의 서비스를 제공하기 위해 노력하고 있습니다.'}
+                                    navigate={(path) => router.push(path)}
+                                    postImgs={galleryArray.map(img => fixImageUrl(img?.url || img))}
+                                />
+                            </div>
                         )}
                     </div>
 
@@ -586,7 +592,7 @@ export default function PremiumMiniHome() {
                     -webkit-user-select: text !important;
                 }
 
-                /* Dark theme wordpress embedded styling */
+                /* Dark theme wordpress & markdown embedded styling */
                 .wordpress-embed-content {
                     color: rgba(255, 255, 255, 0.75) !important;
                     font-size: 0.92rem;
@@ -646,6 +652,40 @@ export default function PremiumMiniHome() {
                     max-width: 100% !important;
                     border-radius: 12px;
                     border: none;
+                }
+
+                /* 🟢 Markdown 렌더러 컬러 다크모드 대응 강제 오버라이드 */
+                .wordpress-embed-content-wrapper .promo-content-wrapper,
+                .wordpress-embed-content-wrapper .promo-content-block,
+                .wordpress-embed-content-wrapper .promo-bold,
+                .wordpress-embed-content-wrapper .promo-li {
+                    color: rgba(255, 255, 255, 0.55) !important;
+                }
+                .wordpress-embed-content-wrapper .promo-content-wrapper h1,
+                .wordpress-embed-content-wrapper .promo-content-wrapper h2,
+                .wordpress-embed-content-wrapper .promo-content-wrapper h3,
+                .wordpress-embed-content-wrapper .promo-content-wrapper h4,
+                .wordpress-embed-content-wrapper .promo-h1,
+                .wordpress-embed-content-wrapper .promo-h2,
+                .wordpress-embed-content-wrapper .promo-sub-title {
+                    color: #ffffff !important;
+                }
+                .wordpress-embed-content-wrapper .promo-blockquote {
+                    border-left: 3.5px solid #d4af37 !important;
+                    background: rgba(212, 175, 55, 0.08) !important;
+                    border-color: rgba(212, 175, 55, 0.25) !important;
+                }
+                .wordpress-embed-content-wrapper .promo-blockquote,
+                .wordpress-embed-content-wrapper .promo-blockquote * {
+                    color: #d4af37 !important;
+                }
+                .wordpress-embed-content-wrapper .promo-callout-box {
+                    background-color: rgba(255, 255, 255, 0.02) !important;
+                    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+                    color: rgba(255, 255, 255, 0.8) !important;
+                }
+                .wordpress-embed-content-wrapper .promo-hr {
+                    border-color: rgba(255, 255, 255, 0.08) !important;
                 }
             `}</style>
         </div>

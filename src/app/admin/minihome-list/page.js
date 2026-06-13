@@ -28,7 +28,13 @@ export default function AdminMiniHomeListPage() {
         setLoading(true);
         try {
             const data = await StoreService.getAllStores(true);
-            setStores(data);
+            // Sort by updatedAt (or createdAt as fallback) descending (recent first)
+            const sortedData = [...data].sort((a, b) => {
+                const timeA = a.updatedAt ? new Date(a.updatedAt).getTime() : (a.createdAt ? a.createdAt * 1000 : 0);
+                const timeB = b.updatedAt ? new Date(b.updatedAt).getTime() : (b.createdAt ? b.createdAt * 1000 : 0);
+                return timeB - timeA;
+            });
+            setStores(sortedData);
         } catch (error) {
             console.error("Error fetching stores for mini-home:", error);
         } finally {

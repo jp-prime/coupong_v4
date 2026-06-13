@@ -264,7 +264,8 @@ export default function BoardClient({ initialSelectedPost }) {
                         id: fullPost._id,
                         title: fullPost.title,
                         content: fullPost.content || fullPost.summary || '',
-                        images: fullPost.bannerImageUrl ? [fullPost.bannerImageUrl] : (fullPost.thumbnailUrl ? [fullPost.thumbnailUrl] : []),
+                        images: fullPost.thumbnailUrl ? [fullPost.thumbnailUrl] : [],
+                        bannerImageUrl: fullPost.bannerImageUrl || null,
                         createdAt: fullPost.publishedAt || new Date().toISOString(),
                         authorName: "운영자",
                         viewCount: post.viewCount || 0,
@@ -855,22 +856,21 @@ export default function BoardClient({ initialSelectedPost }) {
                                     )}
                                 </div>
 
-                                {selectedPost.images && selectedPost.images.length > 0 && selectedPost.category !== '가맹점 정보' && (
+                                {selectedPost.bannerImageUrl && selectedPost.category !== '가맹점 정보' && (
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '40px' }}>
-                                        {selectedPost.images.map((img, idx) => {
-                                            const isBanner = selectedPost.bannerImageUrl === img;
+                                        {(() => {
                                             const imgElement = (
                                                 <img 
-                                                    src={fixImageUrl(img)} 
+                                                    src={fixImageUrl(selectedPost.bannerImageUrl)} 
                                                     alt="" 
                                                     referrerPolicy="no-referrer" 
-                                                    style={{ width: '100%', borderRadius: '20px', boxShadow: '0 8px 24px rgba(0,0,0,0.05)', cursor: isBanner && selectedPost.bannerLink ? 'pointer' : 'default' }} 
+                                                    style={{ width: '100%', borderRadius: '20px', boxShadow: '0 8px 24px rgba(0,0,0,0.05)', cursor: selectedPost.bannerLink ? 'pointer' : 'default' }} 
                                                 />
                                             );
                                             
-                                            if (isBanner && selectedPost.bannerLink) {
+                                            if (selectedPost.bannerLink) {
                                                 return (
-                                                    <a key={idx} href={selectedPost.bannerLink} target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%' }}>
+                                                    <a href={selectedPost.bannerLink} target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%' }}>
                                                         {imgElement}
                                                     </a>
                                                 );
