@@ -191,7 +191,7 @@ export default function AdminMiniHomeListPage() {
                             </div>
                             <div style={{ display: 'flex', gap: '10px' }}>
                                 <button
-                                    onClick={() => router.push(`/edit-store/${store.id}`)}
+                                    onClick={() => router.push(`/admin/minihome-register/${store.id}`)}
                                     style={{ 
                                         padding: '12px 20px', 
                                         borderRadius: '16px', 

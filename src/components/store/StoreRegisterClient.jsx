@@ -908,7 +908,7 @@ export default function StoreRegisterClient() {
                             />
                             {formData.slug && (
                                 <p style={{ fontSize: '0.75rem', color: '#64748b', margin: '4px 0 0 4px', fontWeight: 600 }}>
-                                    설정 시 주소: <span style={{ color: '#4f46e5' }}>https://coupong.online/store/{formData.slug}</span>
+                                    설정 시 단축 주소: <span style={{ color: '#4f46e5' }}>https://coupong.online/go/{formData.slug}</span> (또는 /mini-home/{formData.slug})
                                 </p>
                             )}
                         </div>
