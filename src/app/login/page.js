@@ -120,7 +120,7 @@ export default function LoginPage() {
                 style={{ marginBottom: '32px', textAlign: 'center' }}
             >
                 <img 
-                    src="/비나통_로고.png" 
+                    src="/비나통_로고2.png" 
                     alt="비나통 로고" 
                     style={{ height: '42px', width: 'auto', display: 'block', margin: '0 auto 12px', objectFit: 'contain' }} 
                 />
