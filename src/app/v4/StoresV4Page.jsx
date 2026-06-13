@@ -581,7 +581,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                     <p 
                                         onClick={(e) => handleOpenDetailSheet(e, store)}
                                         style={{
-                                            fontSize: '0.88rem',
+                                            fontSize: '1.0rem',
                                             color: '#d4d4d8',
                                             margin: '0 0 10px 0',
                                             fontWeight: 700,
@@ -600,7 +600,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                     <div 
                                         onClick={(e) => handleOpenDetailSheet(e, store)}
                                         style={{
-                                            fontSize: '0.82rem',
+                                            fontSize: '0.875rem',
                                             color: 'rgba(255,255,255,0.6)',
                                             lineHeight: '1.45',
                                             cursor: 'pointer',
@@ -864,7 +864,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                     {getLocalizedString(detailStore.name)}
                                 </h3>
                                 <p style={{ 
-                                    fontSize: '0.88rem', 
+                                    fontSize: '1.0rem', 
                                     color: '#d4d4d8', 
                                     fontWeight: 700, 
                                     margin: 0,
@@ -1053,7 +1053,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                 .v4-markdown-dark h2, .v4-markdown-dark .promo-h2,
                 .v4-markdown-dark h3, .v4-markdown-dark .promo-sub-title,
                 .v4-markdown-dark h4, .v4-markdown-dark .promo-h4 {
-                    color: #ffffff !important;
+                    color: #e4e4e7 !important;
                     border-bottom-color: rgba(255,255,255,0.08) !important;
                 }
                 .v4-markdown-dark .promo-blockquote {
