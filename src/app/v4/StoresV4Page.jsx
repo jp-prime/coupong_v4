@@ -850,9 +850,9 @@ export default function StoresV4Page({ initialStores = [] }) {
                                     {getLocalizedString(detailStore.name)}
                                 </h3>
                                 <p style={{ 
-                                    fontSize: '1.05rem', 
+                                    fontSize: '0.88rem', 
                                     color: '#d4d4d8', 
-                                    fontWeight: 800, 
+                                    fontWeight: 700, 
                                     margin: 0,
                                     lineHeight: '1.35',
                                     textShadow: '0 2px 8px rgba(0,0,0,0.7)',
