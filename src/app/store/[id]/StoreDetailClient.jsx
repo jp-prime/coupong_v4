@@ -337,7 +337,7 @@ export default function StoreDetailClient({ id, initialStoreData }) {
                 /* 모바일 기기에서 헤더 영역 높이(64px)만큼 본문을 내려서 겹침 방지 */
                 @media (max-width: 1024px) {
                     main.store-detail-main {
-                        padding-top: 10px !important;
+                        padding-top: 20px !important;
                     }
                 }
             `}</style>
