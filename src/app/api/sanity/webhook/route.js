@@ -540,6 +540,49 @@ export async function POST(request) {
             publishToWix(postData, existingWixId)
         ]);
 
+        // 가맹점 정보가 아닌 경우, 발행을 위해 빌드된 enrichedContent를 Firestore 본문 데이터로 반영
+        if (!isStore) {
+            // WordPress 발행을 위해 준비했던 enrichedContent 형태를 동일하게 획득
+            let rawContent = postData.content || '';
+            const carouselRegex = /```(?:carousel|gallery)([\s\S]*?)```/g;
+            rawContent = rawContent.replace(carouselRegex, (match, blockContent) => {
+              const lines = blockContent.split('\n');
+              let htmlImages = '<div style="display: flex; flex-direction: column; gap: 20px; align-items: center; margin: 20px 0; width: 100%;">';
+              let count = 0;
+              for (let line of lines) {
+                line = line.trim();
+                if (!line) continue;
+                const mdImgMatch = /!\[.*?\]\((.*?)\)/.exec(line);
+                let imgUrl = '';
+                if (mdImgMatch) { imgUrl = mdImgMatch[1]; } 
+                else if (line.startsWith('http://') || line.startsWith('https://') || line.startsWith('/')) { imgUrl = line; }
+                if (imgUrl) {
+                  htmlImages += `<img src="${imgUrl}" style="width: 100%; max-height: 500px; object-fit: cover; border-radius: 20px; display: block; margin: 10px auto;" />`;
+                  count++;
+                }
+              }
+              htmlImages += '</div>';
+              return count > 0 ? htmlImages : '';
+            });
+            rawContent = parseMarkdownTables(rawContent);
+            const mdImageInlineRegex = /!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g;
+            rawContent = rawContent.replace(mdImageInlineRegex, (match, alt, imgUrl) => {
+              return `<img src="${imgUrl}" alt="${alt}" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; border-radius: 20px; display: block; margin: 12px auto;" />`;
+            });
+
+            let finalHtml = simpleMarkdownToHtml(rawContent);
+            if (postData.thumbnailUrl) {
+              finalHtml = `<div style="text-align: center; margin-bottom: 20px;"><img src="${postData.thumbnailUrl}" alt="${postData.title}" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; border-radius: 20px; display: block; margin: 0 auto;" /></div>\n` + finalHtml;
+            }
+            const currentBannerUrl = postData.bannerImageUrl || "https://cdn.sanity.io/images/8xyje6wz/production/1d60b2d2c9402497f221e15614a4b8dc3c5ae833-1747x492.jpg";
+            const currentBannerLink = postData.bannerLink || "https://www.vinatong.store";
+            finalHtml += `\n\n<div style="text-align: center; margin-top: 30px; margin-bottom: 20px;"><a href="${currentBannerLink}" target="_blank"><img src="${currentBannerUrl}" alt="홍보 배너" style="max-width: 100%; height: auto; border-radius: 8px;" /></a></div>`;
+            const canonicalUrl = `https://www.vinatong.store/board?slug=${encodeURIComponent(postData.slug)}`;
+            finalHtml += `\n\n<p style="text-align: center; margin-top: 20px; font-size: 0.9em; color: #888;">이 글은 <a href="${canonicalUrl}" target="_blank">비나통(VinaTong)</a>에서 최초 발행되었습니다.</p>`;
+
+            postData.content = finalHtml;
+        }
+
         if (wpPostId) postData.wpPostId = wpPostId;
         if (wixPostId) postData.wixPostId = wixPostId;
 
