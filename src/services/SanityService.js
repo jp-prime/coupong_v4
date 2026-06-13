@@ -74,7 +74,7 @@ export const SanityService = {
 
       let result = null;
       try {
-        result = await client.fetch(query, { idOrSlug: decodedIdOrSlug }, { cache: 'no-store', next: { revalidate: 0 } });
+        result = await client.withConfig({ useCdn: false }).fetch(query, { idOrSlug: decodedIdOrSlug }, { cache: 'no-store', next: { revalidate: 0 } });
       } catch (sanityError) {
         console.warn("⚠️ Sanity API Request failed (possible network/CORS block):", sanityError.message);
       }
@@ -400,7 +400,7 @@ export const SanityService = {
         bannerLink
       }`;
 
-      const result = await client.fetch(query, { slug: decodedSlug });
+      const result = await client.withConfig({ useCdn: false }).fetch(query, { slug: decodedSlug });
       return result || null;
     } catch (error) {
       console.error("❌ 게시글 상세 조회 오류:", error);
