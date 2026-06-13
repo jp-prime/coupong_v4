@@ -735,6 +735,85 @@ export const StoreService = {
     },
 
     /**
+     * 특정 업소에 관리자 이메일을 등록하고 임명 처리합니다.
+     */
+    assignManagerToStore: async (storeId, email) => {
+        try {
+            const { doc, getDoc, setDoc, query, collection, where, getDocs, runTransaction } = await import('firebase/firestore');
+            
+            const emailClean = email ? email.trim().toLowerCase() : '';
+            if (!emailClean) {
+                // 이메일이 없는 경우 기본값인 운영자 관리자 형태로 되돌림
+                // coupons 및 stores 컬렉션 모두 초기화
+                const couponsRef = doc(db, STORE_COLLECTION, storeId);
+                const storesRef = doc(db, NEW_STORE_COLLECTION, storeId);
+
+                await setDoc(couponsRef, {
+                    managerEmail: '',
+                    managerUid: ''
+                }, { merge: true });
+
+                try {
+                    await setDoc(storesRef, {
+                        managerEmail: '',
+                        managerUid: ''
+                    }, { merge: true });
+                } catch (e) {}
+
+                StoreService.clearCache();
+                return { success: true, message: "관리자가 지정 해제되었습니다. (기본 운영자 권한 작동)" };
+            }
+
+            // 1. 해당 이메일을 가진 유저 UID 찾기
+            const userQuery = query(collection(db, 'users'), where('email', '==', emailClean));
+            const userSnap = await getDocs(userQuery);
+            
+            if (userSnap.empty) {
+                return { success: false, error: "해당 이메일로 등록된 회원을 찾을 수 없습니다. 먼저 회원가입이 필요합니다." };
+            }
+
+            const targetUserDoc = userSnap.docs[0];
+            const targetUid = targetUserDoc.id;
+
+            // 2. 트랜잭션으로 가맹점 정보 및 유저 권한 동시 갱신
+            await runTransaction(db, async (transaction) => {
+                const couponsRef = doc(db, STORE_COLLECTION, storeId);
+                const storesRef = doc(db, NEW_STORE_COLLECTION, storeId);
+                const userRef = doc(db, 'users', targetUid);
+
+                // 가맹점의 관리자 필드 업데이트 (coupons 컬렉션)
+                transaction.set(couponsRef, {
+                    managerEmail: emailClean,
+                    managerUid: targetUid,
+                    updatedAt: new Date().toISOString()
+                }, { merge: true });
+
+                // 가맹점의 관리자 필드 업데이트 (stores 컬렉션 - 존재하는 경우에만)
+                try {
+                    transaction.set(storesRef, {
+                        managerEmail: emailClean,
+                        managerUid: targetUid,
+                        updatedAt: new Date().toISOString()
+                    }, { merge: true });
+                } catch(e) {}
+
+                // 임명된 유저의 권한 설정
+                transaction.set(userRef, {
+                    isStoreOwner: true,
+                    managedStoreId: storeId,
+                    updatedAt: new Date().toISOString()
+                }, { merge: true });
+            });
+
+            StoreService.clearCache();
+            return { success: true, message: "성공적으로 가맹점 관리자로 임명되었습니다." };
+        } catch (error) {
+            console.error("Error in assignManagerToStore:", error);
+            throw error;
+        }
+    },
+    
+    /**
      * 특정 업소의 좋아요(관심업소) 토글 (서버 카운트 증가/감소)
      */
     toggleStoreLike: async (storeId, isLiked) => {

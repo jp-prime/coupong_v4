@@ -36,6 +36,8 @@ export default function AdminAllStoresPage() {
     const [applications, setApplications] = useState([]);
     const [appsLoading, setAppsLoading] = useState(false);
     const [expandedAppId, setExpandedAppId] = useState(null);
+    const [assignEmailMap, setAssignEmailMap] = useState({}); // storeId -> email
+    const [assignLoadingMap, setAssignLoadingMap] = useState({}); // storeId -> boolean
     const { getLocalizedString, getTranslatedLocation, fixImageUrl } = useStoreHelpers();
 
     useEffect(() => {
@@ -137,6 +139,25 @@ export default function AdminAllStoresPage() {
 
     const handleSNSPromote = (store) => {
         alert("SNS 홍보 기능이 준비되었습니다.");
+    };
+
+    const handleAssignManager = async (storeId) => {
+        const email = assignEmailMap[storeId] || '';
+        setAssignLoadingMap(prev => ({ ...prev, [storeId]: true }));
+        try {
+            const res = await StoreService.assignManagerToStore(storeId, email);
+            if (res.success) {
+                alert(res.message);
+                setStores(stores.map(s => s.id === storeId ? { ...s, managerEmail: email } : s));
+            } else {
+                alert(`오류: ${res.error}`);
+            }
+        } catch (error) {
+            console.error("Assign manager failed:", error);
+            alert("임명 처리 중 오류가 발생했습니다.");
+        } finally {
+            setAssignLoadingMap(prev => ({ ...prev, [storeId]: false }));
+        }
     };
 
     const formatDate = (timestamp) => {
@@ -306,6 +327,51 @@ export default function AdminAllStoresPage() {
                                                         Sanity
                                                     </span>
                                                 )}
+                                            </div>
+                                            
+                                            {/* 관리자(매니저) 이메일 임명 인라인 폼 */}
+                                            <div style={{ marginTop: '12px', padding: '10px 12px', background: '#f1f5f9', borderRadius: '12px', border: '1px solid #cbd5e1' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                                                    <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#334155' }}>🔑 업소 관리자 임명</span>
+                                                    <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                                                        현재: <span style={{ color: store.managerEmail ? '#4f46e5' : '#ef4444', fontWeight: 900 }}>{store.managerEmail || '운영자(기본)'}</span>
+                                                    </span>
+                                                </div>
+                                                <div style={{ display: 'flex', gap: '6px' }}>
+                                                    <input 
+                                                        type="email"
+                                                        placeholder="회원 이메일 입력"
+                                                        value={assignEmailMap[store.id] !== undefined ? assignEmailMap[store.id] : (store.managerEmail || '')}
+                                                        onChange={(e) => setAssignEmailMap(prev => ({ ...prev, [store.id]: e.target.value }))}
+                                                        style={{
+                                                            flex: 1,
+                                                            padding: '6px 10px',
+                                                            borderRadius: '8px',
+                                                            border: '1px solid #cbd5e1',
+                                                            fontSize: '0.78rem',
+                                                            outline: 'none',
+                                                            background: 'white',
+                                                            color: 'black'
+                                                        }}
+                                                    />
+                                                    <button
+                                                        onClick={() => handleAssignManager(store.id)}
+                                                        disabled={assignLoadingMap[store.id]}
+                                                        style={{
+                                                            padding: '6px 12px',
+                                                            borderRadius: '8px',
+                                                            background: '#6366f1',
+                                                            color: 'white',
+                                                            border: 'none',
+                                                            fontSize: '0.75rem',
+                                                            fontWeight: 900,
+                                                            cursor: 'pointer',
+                                                            opacity: assignLoadingMap[store.id] ? 0.7 : 1
+                                                        }}
+                                                    >
+                                                        {assignLoadingMap[store.id] ? '반영중' : '임명'}
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
