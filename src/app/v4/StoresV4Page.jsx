@@ -590,7 +590,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                         onClick={(e) => handleOpenDetailSheet(e, store)}
                                         style={{
                                             fontSize: '1.0rem',
-                                            color: '#d4d4d8',
+                                            color: '#f4f4f5', // 조금 더 밝게 조정 (#d4d4d8 -> #f4f4f5)
                                             margin: '0 0 10px 0',
                                             fontWeight: 700,
                                             lineHeight: '1.35',
@@ -609,7 +609,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                         onClick={(e) => handleOpenDetailSheet(e, store)}
                                         style={{
                                             fontSize: '0.875rem',
-                                            color: 'rgba(255,255,255,0.6)',
+                                            color: 'rgba(255,255,255,0.85)', // 조금 더 밝게 조정 (rgba 0.6 -> 0.85)
                                             lineHeight: '1.45',
                                             cursor: 'pointer',
                                             marginTop: '6px',
