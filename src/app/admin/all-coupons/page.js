@@ -178,6 +178,7 @@ export default function AdminAllCouponsPage() {
                             발행된 모든 업체의 쿠폰을 통합 관리합니다
                         </p>
                     </div>
+                    </div>
                 </div>
                 <button
                     onClick={() => setIsStoreModalOpen(true)}

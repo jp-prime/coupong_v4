@@ -218,6 +218,7 @@ export default function AdminAllStoresPage() {
                         활성 쿠폰이 1개 이상 등록된 업체만 메인 페이지에 노출됩니다.
                     </div>
                 </div>
+                </div>
             </div>
 
             {/* 탭 시스템 */}

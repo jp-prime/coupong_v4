@@ -69,19 +69,20 @@ export default function AdminRedemptionsPage() {
                 {/* Header */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <button
-                        onClick={() => router.push('/admin')}
-                        style={{ background: 'none', border: 'none', color: '#0f172a', cursor: 'pointer', padding: '8px' }}
-                    >
-                        <ArrowLeft size={24} />
-                    </button>
-                    <div>
-                        <h1 style={{ fontSize: '1.4rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <History style={{ color: '#10b981' }} size={20} /> 쿠폰 승인 사용 내역
-                        </h1>
-                        <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
-                            실시간 모바일 QR 스캔 및 수동 승인 처리 기록 리스트입니다.
-                        </p>
+                        <button
+                            onClick={() => router.push('/admin')}
+                            style={{ background: 'none', border: 'none', color: '#0f172a', cursor: 'pointer', padding: '8px' }}
+                        >
+                            <ArrowLeft size={24} />
+                        </button>
+                        <div>
+                            <h1 style={{ fontSize: '1.4rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <History style={{ color: '#10b981' }} size={20} /> 쿠폰 승인 사용 내역
+                            </h1>
+                            <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
+                                실시간 모바일 QR 스캔 및 수동 승인 처리 기록 리스트입니다.
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <button 
