@@ -200,6 +200,14 @@ export default function StoresV4Page({ initialStores = [] }) {
     const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
     const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
     const [detailStore, setDetailStore] = useState(null);
+    const [detailLang, setDetailLang] = useState(i18n.language || 'ko');
+
+    // Sync global language switch to detail Lang inside sheet
+    useEffect(() => {
+        if (i18n.language) {
+            setDetailLang(i18n.language);
+        }
+    }, [i18n.language]);
 
     const containerRef = useRef(null);
     const touchStartY = useRef(0);
@@ -880,9 +888,65 @@ export default function StoresV4Page({ initialStores = [] }) {
                             <div style={{ width: '40px', height: '4px', background: 'rgba(255,255,255,0.2)', borderRadius: '2px', margin: '0 auto 20px' }} />
                             
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <Sparkles size={16} color="#d4af37" />
-                                    <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#d4af37', letterSpacing: '1px' }}>STORE PROFILE</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <Sparkles size={16} color="#d4af37" />
+                                        <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#d4af37', letterSpacing: '1px' }}>STORE PROFILE</span>
+                                    </div>
+
+                                    {/* 번역 데이터에 기반한 다국어 선택용 국기 버튼 */}
+                                    {detailStore && (() => {
+                                        const flags = [];
+                                        
+                                        // 1. 한국어
+                                        flags.push({ code: 'ko', img: 'https://flagcdn.com/w40/kr.png', alt: 'KO' });
+
+                                        // 2. 베트남어 여부 체크
+                                        const hasVi = detailStore.nameVi || detailStore.sloganVi || detailStore.locationVi || (detailStore.descriptionVi && detailStore.descriptionVi.trim()) || (detailStore.description && detailStore.description.vi);
+                                        if (hasVi) {
+                                            flags.push({ code: 'vi', img: 'https://flagcdn.com/w40/vn.png', alt: 'VI' });
+                                        }
+
+                                        // 3. 영어 여부 체크
+                                        const hasEn = detailStore.nameEn || detailStore.sloganEn || detailStore.locationEn || (detailStore.descriptionEn && detailStore.descriptionEn.trim()) || (detailStore.description && detailStore.description.en);
+                                        if (hasEn) {
+                                            flags.push({ code: 'en', img: 'https://flagcdn.com/w40/gb.png', alt: 'EN' });
+                                        }
+
+                                        if (flags.length > 1) {
+                                            return (
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.05)', padding: '2px 8px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                                                    {flags.map((flag) => {
+                                                        const isSelected = (detailLang || 'ko') === flag.code;
+                                                        return (
+                                                            <button
+                                                                key={flag.code}
+                                                                onClick={() => setDetailLang(flag.code)}
+                                                                style={{
+                                                                    background: 'none',
+                                                                    border: 'none',
+                                                                    padding: '2px 0',
+                                                                    cursor: 'pointer',
+                                                                    opacity: isSelected ? 1 : 0.4,
+                                                                    transform: isSelected ? 'scale(1.15)' : 'scale(0.95)',
+                                                                    transition: 'all 0.2s',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center'
+                                                                }}
+                                                            >
+                                                                <img 
+                                                                    src={flag.img} 
+                                                                    alt={flag.alt} 
+                                                                    style={{ width: '18px', height: 'auto', borderRadius: '2px', boxShadow: '0 1px 3px rgba(0,0,0,0.3)' }} 
+                                                                />
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    })()}
                                 </div>
                                 <button 
                                     onClick={() => setIsDetailSheetOpen(false)}
@@ -898,20 +962,58 @@ export default function StoresV4Page({ initialStores = [] }) {
                                     <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', margin: '16px 0' }} />
 
                                     {/* 텍스트 디테일 마크다운 소개 정보 */}
-                                    {getLocalizedString(detailStore.description) ? (
-                                        <div className="v4-markdown-dark" style={{ fontSize: '0.9rem', color: '#d4d4d8', lineHeight: '1.65', marginBottom: '24px' }}>
-                                            <RenderWithShortcodes text={getLocalizedString(detailStore.description)} />
-                                        </div>
-                                    ) : (
-                                        <div style={{ fontSize: '0.9rem', color: '#d4d4d8', lineHeight: '1.65', marginBottom: '24px' }}>
-                                            등록된 업체 설명정보가 없습니다.
-                                        </div>
-                                    )}
+                                    {(() => {
+                                        // 국기 선택된 언어에 맞는 텍스트 선택 기법
+                                        let descText = '';
+                                        if (detailLang === 'vi') {
+                                            descText = detailStore.descriptionVi || (detailStore.description && detailStore.description.vi) || '';
+                                        } else if (detailLang === 'en') {
+                                            descText = detailStore.descriptionEn || (detailStore.description && detailStore.description.en) || '';
+                                        } else {
+                                            descText = detailStore.descriptionKo || detailStore.description || (detailStore.description && detailStore.description.ko) || '';
+                                        }
+
+                                        // string이 아닌 객체 타입인 경우를 대비한 폴백 처리
+                                        if (typeof descText === 'object') {
+                                            descText = descText[detailLang] || descText.ko || descText.vi || descText.en || '';
+                                        }
+
+                                        if (descText && String(descText).trim()) {
+                                            return (
+                                                <div className="v4-markdown-dark" style={{ fontSize: '0.9rem', color: '#d4d4d8', lineHeight: '1.65', marginBottom: '24px' }}>
+                                                    <RenderWithShortcodes text={String(descText)} />
+                                                </div>
+                                            );
+                                        }
+
+                                        return (
+                                            <div style={{ fontSize: '0.9rem', color: '#d4d4d8', lineHeight: '1.65', marginBottom: '24px' }}>
+                                                등록된 업체 설명정보가 없습니다.
+                                            </div>
+                                        );
+                                    })()}
 
                                     {/* 위치 및 연락처 추가 정보 블록 */}
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                         {detailStore.address && (() => {
-                                            const mapLink = detailStore.googleMapUrl || detailStore.mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(getLocalizedString(detailStore.address))}`;
+                                            // 주소도 선택 언어에 맞춰 번역 맵핑 적용
+                                            let addrText = '';
+                                            if (detailLang === 'vi') {
+                                                addrText = detailStore.addressVi || detailStore.locationVi || '';
+                                            } else if (detailLang === 'en') {
+                                                addrText = detailStore.addressEn || detailStore.locationEn || '';
+                                            } else {
+                                                addrText = detailStore.addressKo || detailStore.address || detailStore.location || '';
+                                            }
+
+                                            if (typeof addrText === 'object') {
+                                                addrText = addrText[detailLang] || addrText.ko || addrText.vi || addrText.en || '';
+                                            }
+                                            if (!addrText) {
+                                                addrText = getLocalizedString(detailStore.address);
+                                            }
+
+                                            const mapLink = detailStore.googleMapUrl || detailStore.mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(String(addrText))}`;
                                             return (
                                                 <div 
                                                     style={{ 
@@ -928,7 +1030,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: 0 }}>
                                                         <MapPin size={16} color="#d4af37" style={{ flexShrink: 0 }} />
                                                         <span style={{ fontSize: '0.82rem', color: '#d4d4d8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                                            <strong>위치 : </strong>{getLocalizedString(detailStore.address)}
+                                                            <strong>위치 : </strong>{String(addrText)}
                                                         </span>
                                                     </div>
                                                     <button
