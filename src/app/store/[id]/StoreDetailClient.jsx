@@ -77,7 +77,7 @@ export default function StoreDetailClient({ id, initialStoreData }) {
     const [loading, setLoading] = useState(true);
     const [currentIdx, setCurrentIdx] = useState(0);
     const [recommendations, setRecommendations] = useState([]);
-    const [windowWidth, setWindowWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 800);
+    const [windowWidth, setWindowWidth] = useState(800);
     const [galleryBatchIndex, setGalleryBatchIndex] = useState(0);
     const [isUseModalOpen, setIsUseModalOpen] = useState(false);
     const [useCouponDataForUse, setUseCouponDataForUse] = useState(null);
@@ -252,6 +252,7 @@ export default function StoreDetailClient({ id, initialStoreData }) {
 
     useEffect(() => {
         const handleResize = () => setWindowWidth(window.innerWidth);
+        handleResize(); // 마운트 시 최초 실행하여 클라이언트 가로폭 획득
         window.addEventListener('resize', handleResize);
         if (id) fetchStoreData();
         return () => window.removeEventListener('resize', handleResize);
