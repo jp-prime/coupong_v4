@@ -15,10 +15,12 @@ export default function CouponsClient({ initialStores }) {
     const router = useRouter();
     const [stores, setStores] = useState(initialStores || []);
     const [windowWidth, setWindowWidth] = useState(375);
+    const [isMounted, setIsMounted] = useState(false);
     const [visibleCount, setVisibleCount] = useState(12);
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
+        setIsMounted(true);
         setWindowWidth(window.innerWidth);
         const handleResize = () => setWindowWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
@@ -50,16 +52,16 @@ export default function CouponsClient({ initialStores }) {
             <main style={{ maxWidth: '1280px', margin: '0 auto' }}>
                 {/* 통합 탑 배너 카드 */}
                 <div style={{
-                    margin: windowWidth < 640 ? '12px 12px 16px 12px' : '20px 20px 20px 20px',
+                    margin: (!isMounted || windowWidth < 640) ? '12px 12px 16px 12px' : '20px 20px 20px 20px',
                     borderRadius: '24px',
                     position: 'relative',
                     background: 'radial-gradient(circle at 15% 85%, rgba(168, 85, 247, 0.3), transparent 60%), radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.25), transparent 60%), #070709',
                     boxShadow: '0 12px 28px rgba(0,0,0,0.12)',
                     paddingBottom: '20px',
                     zIndex: 100,
-                    minHeight: windowWidth < 640 ? '308px' : '324px' // Reserved height to prevent CLS
+                    minHeight: (!isMounted || windowWidth < 640) ? '308px' : '324px' // Reserved height to prevent CLS
                 }}>
-                    <div style={{ position: 'relative', zIndex: 1, minHeight: windowWidth < 640 ? '288px' : '304px' }}>
+                    <div style={{ position: 'relative', zIndex: 1, minHeight: (!isMounted || windowWidth < 640) ? '288px' : '304px' }}>
                         <div style={{ position: 'relative', zIndex: 10, height: '64px' }}>
                             <HeaderV2 isTransparent={true} />
                         </div>
@@ -67,18 +69,18 @@ export default function CouponsClient({ initialStores }) {
                     </div>
                 </div>
 
-                <div style={{ padding: windowWidth < 640 ? '0 12px' : '0 20px' }}>
+                <div style={{ padding: (!isMounted || windowWidth < 640) ? '0 12px' : '0 20px' }}>
                     {/* 타이틀 */}
                     <div style={{ 
                         display: 'flex', 
                         alignItems: 'center', 
                         justifyContent: 'space-between', 
-                        marginBottom: windowWidth < 640 ? '16px' : '32px',
+                        marginBottom: (!isMounted || windowWidth < 640) ? '16px' : '32px',
                         marginTop: '0px',
                         gap: '12px'
                     }}>
                         <h2 style={{ 
-                            fontSize: windowWidth < 640 ? '1.1rem' : '1.6rem', 
+                            fontSize: (!isMounted || windowWidth < 640) ? '1.1rem' : '1.6rem', 
                             fontWeight: 950, 
                             color: '#0f172a', 
                             margin: 0, 
@@ -91,8 +93,8 @@ export default function CouponsClient({ initialStores }) {
 
                     <div style={{ 
                         display: 'grid', 
-                        gridTemplateColumns: windowWidth < 1024 ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))', 
-                        gap: windowWidth < 640 ? '20px 12px' : '32px 24px' 
+                        gridTemplateColumns: (!isMounted || windowWidth < 1024) ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))', 
+                        gap: (!isMounted || windowWidth < 640) ? '20px 12px' : '32px 24px' 
                     }}>
                         {filteredStores.slice(0, visibleCount).map((store, idx) => (
                             <CompactStoreCard key={store.id} store={store} index={idx} />

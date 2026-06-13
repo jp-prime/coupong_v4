@@ -43,9 +43,11 @@ const CompactStoreCard = ({ store, index }) => {
     const router = useRouter();
     const { getLocalizedString, fixImageUrl, getTranslatedLocation } = useStoreHelpers();
     const [windowWidth, setWindowWidth] = useState(375);
+    const [isMounted, setIsMounted] = useState(false);
     const { i18n } = useTranslation();
 
     useEffect(() => {
+        setIsMounted(true);
         setWindowWidth(window.innerWidth);
         const handleResize = () => setWindowWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
@@ -98,7 +100,7 @@ const CompactStoreCard = ({ store, index }) => {
                                 display: 'inline',
                                 background: 'rgba(0, 0, 0, 0.65)',
                                 color: '#fff',
-                                fontSize: '0.8rem',
+                                fontSize: '0.75rem',
                                 fontWeight: 800,
                                 padding: '3px 10px',
                                 borderRadius: '4px',
@@ -168,7 +170,7 @@ const CompactStoreCard = ({ store, index }) => {
                     </div>
                 </div>
                 <h3 style={{
-                    fontSize: windowWidth < 768 ? '1.0rem' : '1.2rem', fontWeight: 950, color: '#0f172a', margin: 0, letterSpacing: '-0.5px',
+                    fontSize: (!isMounted || windowWidth < 768) ? '1.0rem' : '1.2rem', fontWeight: 950, color: '#0f172a', margin: 0, letterSpacing: '-0.5px',
                     lineHeight: '1.2', height: '1.2em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
                 }}>
                     {getLocalizedString(store.name)}

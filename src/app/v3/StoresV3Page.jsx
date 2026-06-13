@@ -252,8 +252,10 @@ export default function StoresV3Page({ initialStores = [] }) {
     const [loading, setLoading] = useState(initialStores.length === 0);
     const [activeIndex, setActiveIndex] = useState(0);
     const [isStandaloneBrowser, setIsStandaloneBrowser] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
+        setIsMounted(true);
         if (typeof window === "undefined") return;
         const ua = navigator.userAgent.toLowerCase();
         const isInApp = ua.includes('kakaotalk') || ua.includes('line') || ua.includes('fb_iab') || ua.includes('instagram') || ua.includes('naver');
@@ -533,7 +535,7 @@ export default function StoresV3Page({ initialStores = [] }) {
                                 onClick={(e) => handleDetail(e, store)}
                                 style={{
                                     width: '100%',
-                                    height: isStandaloneBrowser ? '57%' : '62%',
+                                    height: (isMounted && isStandaloneBrowser) ? '57%' : '62%',
                                     position: 'relative',
                                     background: '#000',
                                     overflow: 'hidden',
@@ -589,9 +591,9 @@ export default function StoresV3Page({ initialStores = [] }) {
                                 onClick={(e) => handleDetail(e, store)}
                                 style={{
                                     width: '100%',
-                                    height: isStandaloneBrowser ? '43%' : '38%',
+                                    height: (isMounted && isStandaloneBrowser) ? '43%' : '38%',
                                     background: '#121214',
-                                    padding: isStandaloneBrowser 
+                                    padding: (isMounted && isStandaloneBrowser) 
                                         ? '12px 24px calc(24px + env(safe-area-inset-bottom)) 24px' 
                                         : '16px 24px calc(34px + env(safe-area-inset-bottom)) 24px',
                                     color: '#f4f4f5',

@@ -52,12 +52,14 @@ const HeroSliderV2 = ({ isAdmin, searchQuery, setSearchQuery, isMerged = false }
     const router = useRouter();
     const [currentIdx, setCurrentIdx] = useState(0);
     const [windowWidth, setWindowWidth] = useState(375);
+    const [isMounted, setIsMounted] = useState(false);
     const [banners, setBanners] = useState(DEFAULT_BANNERS);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editForm, setEditForm] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
+        setIsMounted(true);
         setWindowWidth(window.innerWidth);
         const handleResize = () => setWindowWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
@@ -375,7 +377,7 @@ const HeroSliderV2 = ({ isAdmin, searchQuery, setSearchQuery, isMerged = false }
                 width: '100%',
                 background: 'transparent',
                 borderRadius: '0 0 28px 28px',
-                padding: '8px 20px 16px 20px',
+                padding: '8px 14px 12px 14px',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '12px',
