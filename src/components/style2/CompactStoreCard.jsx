@@ -35,6 +35,17 @@ const CardThumbnail = ({ store, fixImageUrl, alt, index }) => {
                     pointerEvents: 'none'
                 }}
             />
+            {/* 상단/하단 은은한 검은색 그라디언트 오버레이 (가운데는 선명하게) */}
+            <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 0.45) 100%)',
+                pointerEvents: 'none',
+                zIndex: 1
+            }} />
         </div>
     );
 };
