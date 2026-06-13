@@ -169,21 +169,52 @@ export default function MyPage() {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         style={{
-                            position: 'relative', zIndex: 1, marginTop: '8px', marginBottom: '8px'
+                            position: 'relative', zIndex: 1, marginTop: '8px', marginBottom: '8px',
+                            display: 'flex', flexDirection: 'column', gap: '8px'
                         }}
                     >
-                        <button
-                            onClick={() => router.push(isAdmin ? '/admin' : '/admin/store-owner')}
-                            style={{
-                                width: '100%', padding: '12px', borderRadius: '14px',
-                                background: 'linear-gradient(135deg, #6366f1, #a855f7)',
-                                border: 'none', color: 'white', fontWeight: 900, fontSize: '0.88rem',
-                                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                                boxShadow: '0 4px 14px rgba(99, 102, 241, 0.3)'
-                            }}
-                        >
-                            <Store size={16} /> {isAdmin ? '총괄 어드민 제어판 이동' : '가맹점 파트너 센터 이동'} <ChevronRight size={16} />
-                        </button>
+                        {isAdmin && (
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                                <button
+                                    onClick={() => router.push('/admin')}
+                                    style={{
+                                        width: '100%', padding: '12px 8px', borderRadius: '14px',
+                                        background: 'linear-gradient(135deg, #ef4444, #f97316)',
+                                        border: 'none', color: 'white', fontWeight: 900, fontSize: '0.82rem',
+                                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px',
+                                        boxShadow: '0 4px 14px rgba(239, 68, 68, 0.2)'
+                                    }}
+                                >
+                                    <Store size={14} /> 어드민 제어판 <ChevronRight size={14} />
+                                </button>
+                                <button
+                                    onClick={() => router.push('/admin/store-owner')}
+                                    style={{
+                                        width: '100%', padding: '12px 8px', borderRadius: '14px',
+                                        background: 'linear-gradient(135deg, #6366f1, #a855f7)',
+                                        border: 'none', color: 'white', fontWeight: 900, fontSize: '0.82rem',
+                                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px',
+                                        boxShadow: '0 4px 14px rgba(99, 102, 241, 0.2)'
+                                    }}
+                                >
+                                    <Store size={14} /> 가맹점 관리 <ChevronRight size={14} />
+                                </button>
+                            </div>
+                        )}
+                        {!isAdmin && isStoreOwner && (
+                            <button
+                                onClick={() => router.push('/admin/store-owner')}
+                                style={{
+                                    width: '100%', padding: '12px', borderRadius: '14px',
+                                    background: 'linear-gradient(135deg, #6366f1, #a855f7)',
+                                    border: 'none', color: 'white', fontWeight: 900, fontSize: '0.88rem',
+                                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                                    boxShadow: '0 4px 14px rgba(99, 102, 241, 0.3)'
+                                }}
+                            >
+                                <Store size={16} /> 가맹점 파트너 센터 이동 <ChevronRight size={16} />
+                            </button>
+                        )}
                     </motion.div>
                 )}
 

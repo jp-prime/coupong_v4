@@ -34,11 +34,32 @@ export default function StoreOwnerDashboardPage() {
         loadStoreAndCoupons();
     }, [isStoreOwner, managedStoreId, authLoading, user]);
 
+    const [localManagedStores, setLocalManagedStores] = useState([]);
+
     const loadStoreAndCoupons = async () => {
         setLoading(true);
         try {
-            if (!managedStoreId && managedStores?.length > 0) {
-                selectManagedStore(managedStores[0].id);
+            // 운영자이고 할당된 매장이 없어서 managedStoreId가 없으면 전체 매장 중 첫 번째 것을 임시 로드하거나 빈 상태로 보여줌
+            const isSystemAdmin = user?.email && user.email.toLowerCase() === 'btmt2019@gmail.com';
+            
+            let storesToUse = managedStores || [];
+            if (isSystemAdmin && (!storesToUse || storesToUse.length === 0)) {
+                // 운영자용 전체 매장 목록 조회 및 select 설정
+                const all = await StoreService.getAllStores(true);
+                if (all && all.length > 0) {
+                    storesToUse = all;
+                    setLocalManagedStores(all);
+                    if (!managedStoreId) {
+                        selectManagedStore(all[0].id);
+                        return;
+                    }
+                }
+            } else if (storesToUse.length > 0 && localManagedStores.length === 0) {
+                setLocalManagedStores(storesToUse);
+            }
+
+            if (!managedStoreId && storesToUse.length > 0) {
+                selectManagedStore(storesToUse[0].id);
                 return;
             }
 
@@ -88,7 +109,7 @@ export default function StoreOwnerDashboardPage() {
             </div>
 
             {/* 다중 가맹점 셀렉터 */}
-            {managedStores?.length > 1 && (
+            {localManagedStores?.length > 1 && (
                 <div style={{ marginBottom: '20px', padding: '16px', background: '#f8fafc', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
                     <label style={{ fontSize: '0.78rem', fontWeight: 800, color: '#64748b', display: 'block', marginBottom: '8px' }}>관리할 가맹점 선택</label>
                     <select 
@@ -96,7 +117,7 @@ export default function StoreOwnerDashboardPage() {
                         onChange={(e) => selectManagedStore(e.target.value)}
                         style={{ width: '100%', padding: '10px', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '0.88rem', fontWeight: 700, outline: 'none' }}
                     >
-                        {managedStores.map(s => (
+                        {localManagedStores.map(s => (
                             <option key={s.id} value={s.id}>{getLocalizedString(s.name)}</option>
                         ))}
                     </select>
