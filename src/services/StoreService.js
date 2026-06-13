@@ -452,21 +452,25 @@ export const StoreService = {
 
         try {
             const queries = [];
+            const collections = [STORE_COLLECTION, NEW_STORE_COLLECTION];
 
-            if (emailRaw) {
-                const searchTerms = Array.from(new Set([emailLower, emailRaw]));
-                searchTerms.forEach(term => {
-                    queries.push(query(collection(db, STORE_COLLECTION), where("managerEmail", "==", term)));
-                    queries.push(query(collection(db, STORE_COLLECTION), where("email", "==", term)));
-                    queries.push(query(collection(db, STORE_COLLECTION), where("ownerEmail", "==", term)));
-                });
-            }
+            collections.forEach(colName => {
+                const colRef = collection(db, colName);
+                if (emailRaw) {
+                    const searchTerms = Array.from(new Set([emailLower, emailRaw]));
+                    searchTerms.forEach(term => {
+                        queries.push(query(colRef, where("managerEmail", "==", term)));
+                        queries.push(query(colRef, where("email", "==", term)));
+                        queries.push(query(colRef, where("ownerEmail", "==", term)));
+                    });
+                }
 
-            if (uid) {
-                queries.push(query(collection(db, STORE_COLLECTION), where("managerUid", "==", uid)));
-                queries.push(query(collection(db, STORE_COLLECTION), where("ownerUid", "==", uid)));
-                queries.push(query(collection(db, STORE_COLLECTION), where("uid", "==", uid))); // Sometimes just uid is used
-            }
+                if (uid) {
+                    queries.push(query(colRef, where("managerUid", "==", uid)));
+                    queries.push(query(colRef, where("ownerUid", "==", uid)));
+                    queries.push(query(colRef, where("uid", "==", uid)));
+                }
+            });
 
             const snapshots = await Promise.all(queries.map(q => getDocs(q)));
 
