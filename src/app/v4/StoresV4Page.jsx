@@ -587,7 +587,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                             fontWeight: 700,
                                             lineHeight: '1.35',
                                             textShadow: '1.5px 1.5px 3px rgba(0,0,0,0.95)',
-                                            fontFamily: "'Pretendard', sans-serif",
+                                            fontFamily: "var(--font-base)",
                                             cursor: 'pointer'
                                         }}
                                     >
@@ -606,7 +606,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                             cursor: 'pointer',
                                             marginTop: '6px',
                                             wordBreak: 'break-all',
-                                            fontFamily: "'Pretendard', sans-serif",
+                                            fontFamily: "var(--font-base)",
                                             textShadow: '1px 1px 2px rgba(0,0,0,0.95)'
                                         }}
                                     >
@@ -812,8 +812,8 @@ export default function StoresV4Page({ initialStores = [] }) {
                                 bottom: 0,
                                 left: 0,
                                 right: 0,
-                                maxHeight: '72vh',
-                                minHeight: '42vh',
+                                maxHeight: '67vh',
+                                minHeight: '37vh',
                                 background: '#121214',
                                 borderTopLeftRadius: '24px',
                                 borderTopRightRadius: '24px',
@@ -870,7 +870,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                     margin: 0,
                                     lineHeight: '1.35',
                                     textShadow: '1.5px 1.5px 3px rgba(0,0,0,0.95)',
-                                    fontFamily: "'Pretendard', sans-serif"
+                                    fontFamily: "var(--font-base)"
                                 }}>
                                     {getLocalizedString(detailStore.slogan)}
                                 </p>
