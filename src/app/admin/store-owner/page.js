@@ -235,10 +235,10 @@ export default function StoreOwnerDashboardPage() {
                             <div key={history.id || index} style={{ padding: '14px 16px', background: '#f8fafc', border: '1px solid #f1f5f9', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <div>
                                     <div style={{ fontSize: '0.85rem', fontWeight: 850, color: '#1e293b' }}>
-                                        {history.storeName}
+                                        {getLocalizedString(history.storeName || '가맹점')}
                                     </div>
                                     <div style={{ fontSize: '0.78rem', color: '#ef4444', fontWeight: 800, marginTop: '2px' }}>
-                                        {history.couponTitle}
+                                        {getLocalizedString(history.couponTitle || '할인 쿠폰')}
                                     </div>
                                 </div>
                                 <div style={{ textAlign: 'right' }}>
