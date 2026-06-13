@@ -440,7 +440,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                             width: 'auto', 
                             objectFit: 'contain',
                             borderRadius: '4px',
-                            opacity: 0.8
+                            opacity: 0.6
                         }} 
                     />
                 </div>
