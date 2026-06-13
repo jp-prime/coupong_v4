@@ -581,10 +581,10 @@ export default function StoresV4Page({ initialStores = [] }) {
                                     <p 
                                         onClick={(e) => handleOpenDetailSheet(e, store)}
                                         style={{
-                                            fontSize: '1.05rem',
+                                            fontSize: '0.88rem',
                                             color: '#d4d4d8',
                                             margin: '0 0 10px 0',
-                                            fontWeight: 800,
+                                            fontWeight: 700,
                                             lineHeight: '1.35',
                                             textShadow: '0 1px 6px rgba(0,0,0,0.4)',
                                             fontFamily: "'Pretendard', sans-serif",
