@@ -605,7 +605,8 @@ export default function StoresV4Page({ initialStores = [] }) {
                                             lineHeight: '1.45',
                                             cursor: 'pointer',
                                             marginTop: '6px',
-                                            wordBreak: 'break-all'
+                                            wordBreak: 'break-all',
+                                            fontFamily: "'Pretendard', sans-serif"
                                         }}
                                     >
                                         {(() => {
