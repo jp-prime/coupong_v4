@@ -333,6 +333,13 @@ export default function StoreDetailClient({ id, initialStoreData }) {
                 blockquote p:last-child, .wordpress-embed-content blockquote p:last-child {
                     margin-bottom: 0 !important;
                 }
+                
+                /* 모바일 기기에서 헤더 영역 높이(64px)만큼 본문을 내려서 겹침 방지 */
+                @media (max-width: 1024px) {
+                    main.store-detail-main {
+                        padding-top: 10px !important;
+                    }
+                }
             `}</style>
 
             <HeaderV2 />
@@ -350,7 +357,7 @@ export default function StoreDetailClient({ id, initialStoreData }) {
                     <p style={{ fontWeight: 700 }}>업체를 찾을 수 없습니다.</p>
                 </div>
             ) : (
-                <main style={{ maxWidth: '800px', margin: '0 auto', paddingBottom: '120px', width: '100%', overflowX: 'hidden', position: 'relative' }}>
+                <main className="store-detail-main" style={{ maxWidth: '800px', margin: '0 auto', paddingBottom: '120px', width: '100%', overflowX: 'hidden', position: 'relative' }}>
                     <div style={{ position: 'relative', width: '100%', padding: '0 16px', marginTop: '14px', overflow: 'hidden' }}>
                         <div style={{
                             position: 'relative',
