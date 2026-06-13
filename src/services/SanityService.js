@@ -3,7 +3,7 @@ import { createClient } from '@sanity/client';
 const client = createClient({
   projectId: '8xyje6wz',
   dataset: 'production',
-  useCdn: false, // 실시간 데이터 갱신 및 동기화를 위해 CDN 캐시 사용 해제
+  useCdn: true, // CDN 캐시 사용 활성화 (로딩 속도 대폭 향상, 반영 딜레이 약 60초)
   apiVersion: '2023-05-03', // Sanity API 버전 지정
   requestTag: 'fresh',
 });

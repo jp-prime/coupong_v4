@@ -427,7 +427,7 @@ export default function StoreDetailClient({ id, initialStoreData }) {
                                 } else { 
                                     router.back(); 
                                 } 
-                            }} style={{ position: 'absolute', top: '24px', left: '24px', zIndex: 15, width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', color: 'white', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><ChevronLeft size={24} /></button>
+                            }} style={{ position: 'absolute', top: windowWidth < 1024 ? '88px' : '24px', left: '24px', zIndex: 15, width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', color: 'white', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><ChevronLeft size={24} /></button>
 
                             <div style={{ position: 'absolute', bottom: windowWidth < 768 ? '16px' : '24px', left: windowWidth < 768 ? '16px' : '24px', right: windowWidth < 768 ? '16px' : '24px', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', zIndex: 10 }}>
                                 <div style={{ flex: 1 }}>

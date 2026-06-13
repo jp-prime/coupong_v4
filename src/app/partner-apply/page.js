@@ -107,7 +107,7 @@ export default function PartnerApplyPage() {
                             <Store size={18} color="white" />
                         </div>
                         <span style={{ fontWeight: 900, fontSize: '1.1rem', color: '#1e293b' }}>
-                            쿠퐁온라인
+                            비나통
                         </span>
                     </div>
                 </a>
@@ -172,7 +172,7 @@ export default function PartnerApplyPage() {
                                 </h1>
                                 <p style={{ color: '#64748b', lineHeight: 1.7, fontSize: '0.95rem', margin: 0 }}>
                                     베트남 교민 대상 쿠폰 플랫폼<br />
-                                    <strong style={{ color: '#1e293b' }}>쿠퐁온라인</strong>에 무료로 입점하세요.<br />
+                                    <strong style={{ color: '#1e293b' }}>비나통</strong>에 무료로 입점하세요.<br />
                                     할인쿠폰으로 신규고객을 유치하고<br />
                                     단골도 늘려보세요!
                                 </p>
