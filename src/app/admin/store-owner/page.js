@@ -19,6 +19,7 @@ export default function StoreOwnerDashboardPage() {
     const [loading, setLoading] = useState(true);
     const [storeCoupons, setStoreCoupons] = useState([]);
     const [activeStore, setActiveStore] = useState(null);
+    const [redemptionHistory, setRedemptionHistory] = useState([]);
 
     useEffect(() => {
         if (authLoading) return;
@@ -47,12 +48,22 @@ export default function StoreOwnerDashboardPage() {
 
                 const coupons = await CouponService.getCouponsByStoreId(managedStoreId);
                 setStoreCoupons(coupons);
+
+                const history = await CouponService.getStoreRedemptions(managedStoreId);
+                setRedemptionHistory(history);
             }
         } catch (e) {
-            console.error("Failed to load owner store coupons:", e);
+            console.error("Failed to load owner store coupons and history:", e);
         } finally {
             setLoading(false);
         }
+    };
+
+    const formatDate = (timestamp) => {
+        if (!timestamp) return '-';
+        const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+        return date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }) + ' ' + 
+               date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false });
     };
 
     if (authLoading || loading) {
@@ -71,7 +82,7 @@ export default function StoreOwnerDashboardPage() {
                     <Store size={22} />
                 </div>
                 <div>
-                    <h1 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#0f172a', margin: 0 }}>가맹점 관리자 파트너 센터 center</h1>
+                    <h1 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#0f172a', margin: 0 }}>가맹점 관리자 파트너 센터</h1>
                     <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '2px 0 0 0' }}>매장 정보 수정 및 발행 쿠폰 상태를 파악합니다.</p>
                 </div>
             </div>
@@ -126,7 +137,7 @@ export default function StoreOwnerDashboardPage() {
             )}
 
             {/* 등록된 혜택/쿠폰 목록 */}
-            <div style={{ marginBottom: '20px' }}>
+            <div style={{ marginBottom: '24px' }}>
                 <h3 style={{ fontSize: '1rem', fontWeight: 900, color: '#0f172a', marginBottom: '12px', display: 'flex', alignItems: 'center', justify_content: 'space-between' }}>
                     <span>🎫 등록된 할인 쿠폰 ({storeCoupons.length})</span>
                     <button onClick={loadStoreAndCoupons} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: 800 }}>
@@ -164,6 +175,41 @@ export default function StoreOwnerDashboardPage() {
                                     }}>
                                         {coupon.isActive ? '사용가능' : '종료됨'}
                                     </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {/* 실시간 승인 완료 내역 리스트 추가 (가맹점 관리페이지 하단) */}
+            <div style={{ marginBottom: '24px' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: 900, color: '#0f172a', marginBottom: '12px' }}>
+                    📅 쿠폰 사용 및 승인 완료 내역 ({redemptionHistory.length})
+                </h3>
+                {redemptionHistory.length === 0 ? (
+                    <div style={{ padding: '30px 16px', background: '#f8fafc', borderRadius: '20px', border: '1px dashed #cbd5e1', textAlign: 'center', color: '#64748b', fontSize: '0.82rem' }}>
+                        최근 사용 승인된 내역이 없습니다.
+                    </div>
+                ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        {redemptionHistory.map((history, index) => (
+                            <div key={history.id || index} style={{ padding: '14px 16px', background: '#f8fafc', border: '1px solid #f1f5f9', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div>
+                                    <div style={{ fontSize: '0.85rem', fontWeight: 850, color: '#1e293b' }}>
+                                        {history.storeName}
+                                    </div>
+                                    <div style={{ fontSize: '0.78rem', color: '#ef4444', fontWeight: 800, marginTop: '2px' }}>
+                                        {history.couponTitle}
+                                    </div>
+                                </div>
+                                <div style={{ textAlign: 'right' }}>
+                                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 700 }}>
+                                        {formatDate(history.timestamp)}
+                                    </div>
+                                    <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px', fontWeight: 800 }}>
+                                        공유: {history.senderName || '비회원'}
+                                    </div>
                                 </div>
                             </div>
                         ))}
