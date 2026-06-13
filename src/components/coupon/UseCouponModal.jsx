@@ -245,8 +245,8 @@ const UseCouponModal = ({ isOpen, onClose, coupon, store }) => {
                                         }}>
                                             <QRCodeCanvas
                                                 value={`${window.location.origin}${(() => {
-                                                    const fullPath = window.location.pathname;
-                                                    const routeSegments = ['/store', '/admin', '/coupon', '/mypage', '/login'];
+                                                                                    const fullPath = window.location.pathname;
+                                                    const routeSegments = ['/store', '/admin', '/coupon', '/mypage', '/login', '/v3', '/v4'];
                                                     let bp = fullPath.replace(/\/(index\.html|share\.php)$/, '');
                                                     for (const s of routeSegments) {
                                                         if (bp.includes(s)) {
