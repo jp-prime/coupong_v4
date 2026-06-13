@@ -433,7 +433,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                 </div>
                 <div style={{ width: '38px', height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', pointerEvents: 'auto' }}>
                     <img 
-                        src="/VinaTong.png" 
+                        src="/비나통_로고2.png" 
                         alt="VinaTong Logo" 
                         style={{ 
                             height: '28px', 
