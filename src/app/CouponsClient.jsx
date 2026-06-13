@@ -24,8 +24,18 @@ export default function CouponsClient({ initialStores }) {
         setWindowWidth(window.innerWidth);
         const handleResize = () => setWindowWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
+
+        // seo.php 리다이렉트 파라미터(?goto=) 처리
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const targetPath = params.get('goto');
+            if (targetPath) {
+                router.replace(decodeURIComponent(targetPath));
+            }
+        }
+
         return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    }, [router]);
 
     const filteredStores = stores.filter(store => {
         const query = searchQuery.trim().toLowerCase();

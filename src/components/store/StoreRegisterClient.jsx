@@ -189,6 +189,7 @@ export default function StoreRegisterClient() {
         videoUrl: '',
         managerEmail: '',
         slogan: '',
+        slug: '',
         image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80',
         gallery: [], 
         menu: [],
@@ -292,6 +293,7 @@ export default function StoreRegisterClient() {
                         hashtags: '#쿠퐁온라인 #베트남맛집 #할인쿠폰',
                         status: 'none'
                     },
+                    slug: store.slug || '',
                     shareThumbnail: store.shareThumbnail || '',
                     googleMapUrl: store.googleMapUrl || (store.mapUrl && !store.mapUrl.includes('<iframe') ? store.mapUrl : ''),
                     mapIframeUrl: store.mapIframeUrl || (store.mapUrl && store.mapUrl.includes('<iframe') ? store.mapUrl : ''),
@@ -887,6 +889,30 @@ export default function StoreRegisterClient() {
                         <label style={labelStyle}>업체명 * {langTab !== 'ko' && '(번역 수정)'}</label>
                         <input type="text" name="name" value={getMultiValue('name')} onChange={handleMultiChange} required={langTab === 'ko'} placeholder="업소 이름을 입력하세요" style={inputStyle} />
                     </div>
+
+                    {langTab === 'ko' && (
+                        <div style={{ marginBottom: '12px' }}>
+                            <label style={{ ...labelStyle, color: 'var(--color-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <Globe size={14} /> 단축주소 설정 (영문 소문자/숫자만, 예: bestsalon)
+                            </label>
+                            <input 
+                                type="text" 
+                                name="slug" 
+                                value={formData.slug || ''} 
+                                onChange={(e) => {
+                                    const val = e.target.value.toLowerCase().replace(/[^a-z0-9-_]/g, '');
+                                    setFormData(p => ({ ...p, slug: val }));
+                                }} 
+                                placeholder="예: bestsalon (미설정시 ID로 주소 자동 생성)" 
+                                style={inputStyle} 
+                            />
+                            {formData.slug && (
+                                <p style={{ fontSize: '0.75rem', color: '#64748b', margin: '4px 0 0 4px', fontWeight: 600 }}>
+                                    설정 시 주소: <span style={{ color: '#4f46e5' }}>https://coupong.online/store/{formData.slug}</span>
+                                </p>
+                            )}
+                        </div>
+                    )}
 
                     <div>
                         <label style={labelStyle}>슬로건 {langTab !== 'ko' && '(번역 수정)'}</label>
