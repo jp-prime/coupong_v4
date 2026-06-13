@@ -63,7 +63,7 @@ export default function AdminMiniHomeListPage() {
                     </div>
                 </div>
                 <button 
-                    onClick={() => router.push('/admin/minihome-register/new')}
+                    onClick={() => router.push('/register-store')}
                     style={{ 
                         padding: '10px 20px', 
                         borderRadius: '16px', 
@@ -99,7 +99,8 @@ export default function AdminMiniHomeListPage() {
                             fontSize: '0.95rem', 
                             outline: 'none',
                             background: '#fff',
-                            color: '#0f172a'
+                            color: '#0f172a',
+                            boxSizing: 'border-box'
                         }}
                     />
                 </div>
@@ -190,7 +191,7 @@ export default function AdminMiniHomeListPage() {
                             </div>
                             <div style={{ display: 'flex', gap: '10px' }}>
                                 <button
-                                    onClick={() => router.push(`/admin/minihome-register/${store.id}`)}
+                                    onClick={() => router.push(`/edit-store/${store.id}`)}
                                     style={{ 
                                         padding: '12px 20px', 
                                         borderRadius: '16px', 
