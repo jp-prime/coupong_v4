@@ -277,8 +277,12 @@ export const CouponService = {
                     }
                 }
 
-                const storeRef = doc(db, 'coupons', sharedData.storeId);
-                const storeSnap = await transaction.get(storeRef);
+                let storeRef = doc(db, 'coupons', sharedData.storeId);
+                let storeSnap = await transaction.get(storeRef);
+                if (!storeSnap.exists()) {
+                    storeRef = doc(db, 'stores', sharedData.storeId);
+                    storeSnap = await transaction.get(storeRef);
+                }
                 const storeData = storeSnap.exists() ? storeSnap.data() : null;
                 const managerUid = storeData ? (storeData.managerUid || storeData.ownerUid) : null;
 
