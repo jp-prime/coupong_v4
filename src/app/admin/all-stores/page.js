@@ -186,8 +186,9 @@ export default function AdminAllStoresPage() {
     if (!isAdmin) return null;
 
     return (
-        <div style={{ padding: '24px 16px', maxWidth: '800px', margin: '0 auto', background: '#ffffff', minHeight: '100vh', paddingBottom: '100px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+        <div style={{ minHeight: '100vh', background: '#ffffff', paddingBottom: '100px' }}>
+            <div style={{ padding: '24px 16px', maxWidth: '800px', margin: '0 auto' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
                 <button
                     onClick={() => router.push('/admin')}
                     style={{ background: 'none', border: 'none', color: '#0f172a', cursor: 'pointer', padding: '8px' }}
