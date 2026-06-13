@@ -428,10 +428,21 @@ export default function StoresV4Page({ initialStores = [] }) {
                 >
                     <ChevronLeft size={20} />
                 </button>
-                <div style={{ color: '#d4af37', fontSize: '0.78rem', fontWeight: 900, letterSpacing: '0.2em', pointerEvents: 'auto' }}>
-                    V4 PREMIUM
+                <div style={{ color: '#d4af37', fontSize: '0.82rem', fontWeight: 950, letterSpacing: '0.25em', pointerEvents: 'auto' }}>
+                    VINATONG
                 </div>
-                <div style={{ width: '38px' }} /> {/* Spacer */}
+                <div style={{ width: '38px', height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', pointerEvents: 'auto' }}>
+                    <img 
+                        src="/VinaTong.png" 
+                        alt="VinaTong Logo" 
+                        style={{ 
+                            height: '28px', 
+                            width: 'auto', 
+                            objectFit: 'contain',
+                            borderRadius: '4px'
+                        }} 
+                    />
+                </div>
             </div>
 
             {/* 메인 풀 스크린 피드 슬라이더 */}
