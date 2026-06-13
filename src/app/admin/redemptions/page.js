@@ -51,13 +51,27 @@ export default function AdminRedemptionsPage() {
                date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false });
     };
 
+    const getLangString = (field) => {
+        if (!field) return '';
+        if (typeof field === 'string') return field;
+        if (typeof field === 'object') {
+            return field.ko || field.vi || field.en || Object.values(field)[0] || '';
+        }
+        return String(field);
+    };
+
     const filteredRedemptions = redemptions.filter(item => {
         const query = searchTerm.toLowerCase();
+        const storeNameStr = getLangString(item.storeName).toLowerCase();
+        const couponTitleStr = getLangString(item.couponTitle).toLowerCase();
+        const senderNameStr = getLangString(item.senderName).toLowerCase();
+        const sharedIdStr = (item.sharedId || '').toLowerCase();
+        
         return (
-            (item.storeName || '').toLowerCase().includes(query) ||
-            (item.couponTitle || '').toLowerCase().includes(query) ||
-            (item.senderName || '').toLowerCase().includes(query) ||
-            (item.sharedId || '').toLowerCase().includes(query)
+            storeNameStr.includes(query) ||
+            couponTitleStr.includes(query) ||
+            senderNameStr.includes(query) ||
+            sharedIdStr.includes(query)
         );
     });
 
@@ -85,107 +99,108 @@ export default function AdminRedemptionsPage() {
                         </div>
                     </div>
                 </div>
+                
                 <button 
                     onClick={fetchRedemptions}
-                    style={{ background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '8px 12px', display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 800 }}
+                    style={{ background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '8px 12px', display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 800, marginBottom: '24px' }}
                 >
                     <RefreshCw size={14} /> 새로고침
                 </button>
-            </div>
 
-            {/* 통계 요약 카드 */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
-                <div style={{ background: '#f8fafc', border: '1px solid #f1f5f9', padding: '16px', borderRadius: '16px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', marginBottom: '4px' }}>총 승인 건수</div>
-                    <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#0f172a' }}>{redemptions.length} 건</div>
+                {/* 통계 요약 카드 */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+                    <div style={{ background: '#f8fafc', border: '1px solid #f1f5f9', padding: '16px', borderRadius: '16px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', marginBottom: '4px' }}>총 승인 건수</div>
+                        <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#0f172a' }}>{redemptions.length} 건</div>
+                    </div>
+                    <div style={{ background: '#f8fafc', border: '1px solid #f1f5f9', padding: '16px', borderRadius: '16px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', marginBottom: '4px' }}>누적 정산 리워드</div>
+                        <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#10b981' }}>{totalRewardSum.toLocaleString()} P</div>
+                    </div>
                 </div>
-                <div style={{ background: '#f8fafc', border: '1px solid #f1f5f9', padding: '16px', borderRadius: '16px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', marginBottom: '4px' }}>누적 정산 리워드</div>
-                    <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#10b981' }}>{totalRewardSum.toLocaleString()} P</div>
-                </div>
-            </div>
 
-            {/* 검색 바 */}
-            <div style={{ position: 'relative', marginBottom: '20px' }}>
-                <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
-                <input
-                    type="text"
-                    placeholder="가맹점명, 쿠폰내용, 공유자명 검색..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{
-                        width: '100%', padding: '14px 16px 14px 48px', borderRadius: '16px',
-                        border: '1px solid #e2e8f0', background: 'white',
-                        fontSize: '0.92rem', outline: 'none', color: '#0f172a'
-                    }}
-                />
-            </div>
-
-            {/* 내역 리스트 */}
-            {loading ? (
-                <div style={{ display: 'flex', justifyContent: 'center', padding: '60px' }}>
-                    <Loader2 className="animate-spin" size={36} color="#10b981" />
+                {/* 검색 바 */}
+                <div style={{ position: 'relative', marginBottom: '20px' }}>
+                    <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+                    <input
+                        type="text"
+                        placeholder="가맹점명, 쿠폰내용, 공유자명 검색..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        style={{
+                            width: '100%', padding: '14px 16px 14px 48px', borderRadius: '16px',
+                            border: '1px solid #e2e8f0', background: 'white',
+                            fontSize: '0.92rem', outline: 'none', color: '#0f172a'
+                        }}
+                    />
                 </div>
-            ) : filteredRedemptions.length === 0 ? (
-                <div style={{ padding: '60px 20px', textAlign: 'center', color: '#64748b', fontSize: '0.9rem', border: '1px dashed #e2e8f0', borderRadius: '20px' }}>
-                    조회된 승인 사용 기록이 존재하지 않습니다.
-                </div>
-            ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    {filteredRedemptions.map((item, idx) => (
-                        <div 
-                            key={item.id || idx}
-                            style={{
-                                background: '#f8fafc',
-                                border: '1px solid #e2e8f0',
-                                borderRadius: '24px',
-                                padding: '20px',
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.01)'
-                            }}
-                        >
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <span style={{ fontSize: '0.72rem', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', padding: '3px 8px', borderRadius: '6px', fontWeight: 800 }}>
-                                        승인완료
-                                    </span>
-                                    <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 700 }}>
-                                        {formatDate(item.timestamp)}
-                                    </span>
-                                </div>
-                                <div style={{ fontSize: '0.8rem', color: '#64748b', fontFamily: 'monospace' }}>
-                                    ID: {item.sharedId?.substring(0, 10)}...
-                                </div>
-                            </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '12px', borderTop: '1px solid #e2e8f0', paddingTop: '14px' }}>
-                                <div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-                                        <Store size={14} color="#64748b" />
-                                        <span style={{ fontSize: '0.88rem', fontWeight: 900, color: '#1e293b' }}>
-                                            {item.storeName}
+                {/* 내역 리스트 */}
+                {loading ? (
+                    <div style={{ display: 'flex', justifyContent: 'center', padding: '60px' }}>
+                        <Loader2 className="animate-spin" size={36} color="#10b981" />
+                    </div>
+                ) : filteredRedemptions.length === 0 ? (
+                    <div style={{ padding: '60px 20px', textAlign: 'center', color: '#64748b', fontSize: '0.9rem', border: '1px dashed #e2e8f0', borderRadius: '20px' }}>
+                        조회된 승인 사용 기록이 존재하지 않습니다.
+                    </div>
+                ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        {filteredRedemptions.map((item, idx) => (
+                            <div 
+                                key={item.id || idx}
+                                style={{
+                                    background: '#f8fafc',
+                                    border: '1px solid #e2e8f0',
+                                    borderRadius: '24px',
+                                    padding: '20px',
+                                    boxShadow: '0 4px 12px rgba(0,0,0,0.01)'
+                                }}
+                            >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <span style={{ fontSize: '0.72rem', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', padding: '3px 8px', borderRadius: '6px', fontWeight: 800 }}>
+                                            승인완료
+                                        </span>
+                                        <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 700 }}>
+                                            {formatDate(item.timestamp)}
                                         </span>
                                     </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <Ticket size={14} color="#ef4444" />
-                                        <span style={{ fontSize: '0.88rem', fontWeight: 900, color: '#ef4444' }}>
-                                            {item.couponTitle}
-                                        </span>
+                                    <div style={{ fontSize: '0.8rem', color: '#64748b', fontFamily: 'monospace' }}>
+                                        ID: {item.sharedId?.substring(0, 10)}...
                                     </div>
                                 </div>
 
-                                <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                    <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700 }}>
-                                        공유자: <span style={{ color: '#0f172a', fontWeight: 900 }}>{item.senderName || '비회원'}</span>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '12px', borderTop: '1px solid #e2e8f0', paddingTop: '14px' }}>
+                                    <div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                                            <Store size={14} color="#64748b" style={{ flexShrink: 0 }} />
+                                            <span style={{ fontSize: '0.88rem', fontWeight: 900, color: '#1e293b' }}>
+                                                {getLangString(item.storeName)}
+                                            </span>
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <Ticket size={14} color="#ef4444" style={{ flexShrink: 0 }} />
+                                            <span style={{ fontSize: '0.88rem', fontWeight: 900, color: '#ef4444' }}>
+                                                {getLangString(item.couponTitle)}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700 }}>
-                                        혜택 차감액: <span style={{ color: '#10b981', fontWeight: 900 }}>{item.totalReward ? `${item.totalReward.toLocaleString()} P` : '0 P'}</span>
+
+                                    <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                        <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700 }}>
+                                            공유자: <span style={{ color: '#0f172a', fontWeight: 900 }}>{getLangString(item.senderName) || '비회원'}</span>
+                                        </div>
+                                        <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700 }}>
+                                            혜택 차감액: <span style={{ color: '#10b981', fontWeight: 900 }}>{item.totalReward ? `${item.totalReward.toLocaleString()} P` : '0 P'}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
