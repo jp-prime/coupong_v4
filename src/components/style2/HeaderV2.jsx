@@ -97,7 +97,7 @@ const HeaderV2 = ({ searchQuery, setSearchQuery, isTransparent = false }) => {
                     window.location.href = '/';
                 }} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
                     <img 
-                        src="/비나통_로고.png" 
+                        src="/비나통_로고2.png" 
                         alt="비나통 로고" 
                         style={{ 
                             height: '32px', 
