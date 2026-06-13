@@ -464,7 +464,7 @@ export async function POST(request) {
 
             const storeName = body.name || '';
             const targetStoreId = body.firestoreId || docId;
-            const storeLink = `https://coupong.online/store/${targetStoreId}`;
+            const storeLink = `https://www.vinatong.store/store/${targetStoreId}`;
             const storeDetailButtonHtml = `<div style="text-align: center; margin-top: 30px; margin-bottom: 20px;"><a href="${storeLink}" target="_blank" style="display: inline-block; background-color: #6366f1; color: white; padding: 12px 24px; border-radius: 30px; font-weight: 800; text-decoration: none; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); font-size: 0.95rem;">🏪 ${storeName} 상세보기 바로가기</a></div>`;
 
             const descriptionText = body.description || body.slogan || '';
