@@ -788,7 +788,6 @@ export default function StoresV4Page({ initialStores = [] }) {
                                 backdropFilter: 'blur(4px)'
                             }}
                         />
-                        {/* 바텀시트 본체 */}
                         <motion.div
                             initial={{ y: '100%' }}
                             animate={{ y: 0 }}
@@ -799,7 +798,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                 bottom: 0,
                                 left: 0,
                                 right: 0,
-                                maxHeight: '72vh',
+                                maxHeight: '82vh',
                                 minHeight: '40vh',
                                 background: '#121214',
                                 borderTopLeftRadius: '24px',
@@ -809,9 +808,60 @@ export default function StoresV4Page({ initialStores = [] }) {
                                 padding: '24px 20px calc(24px + env(safe-area-inset-bottom)) 20px',
                                 color: '#f4f4f5',
                                 display: 'flex',
-                                flexDirection: 'column'
+                                flexDirection: 'column',
+                                overflow: 'visible'
                             }}
                         >
+                            {/* 팝업창 밖 바로 위에 띄울 상호 정보 레이아웃 */}
+                            <div style={{
+                                position: 'absolute',
+                                top: '-110px',
+                                left: '20px',
+                                right: '20px',
+                                zIndex: 510,
+                                pointerEvents: 'none',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '6px'
+                            }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <span style={{
+                                        background: 'rgba(212, 175, 55, 0.25)',
+                                        border: '1px solid rgba(212, 175, 55, 0.5)',
+                                        color: '#d4af37',
+                                        fontSize: '0.62rem',
+                                        fontWeight: 900,
+                                        padding: '3px 8px',
+                                        borderRadius: '4px',
+                                        letterSpacing: '0.5px'
+                                    }}>
+                                        {getTranslatedCategory(detailStore.category)?.toUpperCase()}
+                                    </span>
+                                </div>
+                                <h3 style={{ 
+                                    fontSize: '1.9rem', 
+                                    fontWeight: 950, 
+                                    color: '#ffffff', 
+                                    margin: 0,
+                                    letterSpacing: '-0.8px',
+                                    lineHeight: '1.15',
+                                    textShadow: '0 2px 12px rgba(0,0,0,0.85)'
+                                }}>
+                                    {getLocalizedString(detailStore.name)}
+                                </h3>
+                                <p style={{ 
+                                    fontSize: '1.05rem', 
+                                    color: '#d4d4d8', 
+                                    fontWeight: 800, 
+                                    margin: 0,
+                                    lineHeight: '1.35',
+                                    textShadow: '0 2px 8px rgba(0,0,0,0.7)',
+                                    fontFamily: "'Pretendard', sans-serif"
+                                }}>
+                                    {getLocalizedString(detailStore.slogan)}
+                                </p>
+                            </div>
+
                             {/* 드래그 핸들바 */}
                             <div style={{ width: '40px', height: '4px', background: 'rgba(255,255,255,0.2)', borderRadius: '2px', margin: '0 auto 20px' }} />
                             
@@ -830,13 +880,7 @@ export default function StoresV4Page({ initialStores = [] }) {
 
                             <div style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                                 <div style={{ overflowY: 'auto', flex: 1, paddingRight: '4px', paddingBottom: '30px' }} className="hide-scrollbar">
-                                    <h3 style={{ fontSize: '1.5rem', fontWeight: 950, color: '#ffffff', margin: '0 0 4px 0' }}>
-                                        {getLocalizedString(detailStore.name)}
-                                    </h3>
-                                    <p style={{ fontSize: '0.92rem', color: '#a1a1aa', fontWeight: 700, margin: '0 0 20px 0' }}>
-                                        {getLocalizedString(detailStore.slogan)}
-                                    </p>
-
+                                    <div style={{ height: '4px' }} />
                                     <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', margin: '16px 0' }} />
 
                                     {/* 텍스트 디테일 마크다운 소개 정보 */}
