@@ -208,9 +208,12 @@ async function publishToWordPress(postData, existingWpId = null) {
       enrichedContent = `<div style="text-align: center; margin-bottom: 20px;"><img src="${postData.thumbnailUrl}" alt="${postData.title}" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; border-radius: 20px; display: block; margin: 0 auto;" /></div>\n` + enrichedContent;
     }
 
+    const canonicalUrl = `https://www.vinatong.store/board?slug=${encodeURIComponent(postData.slug)}`;
+
     const currentBannerUrl = postData.bannerImageUrl || "https://cdn.sanity.io/images/8xyje6wz/production/1d60b2d2c9402497f221e15614a4b8dc3c5ae833-1747x492.jpg";
     const currentBannerLink = postData.bannerLink || "https://www.vinatong.store";
     enrichedContent += `\n\n<div style="text-align: center; margin-top: 30px; margin-bottom: 20px;"><a href="${currentBannerLink}" target="_blank"><img src="${currentBannerUrl}" alt="홍보 배너" style="max-width: 100%; height: auto; border-radius: 8px;" /></a></div>`;
+    enrichedContent += `\n\n<p style="font-size:0.9rem; color:#6b7280; margin-top:20px; text-align:center;">*이글은 <a href="${canonicalUrl}" target="_blank" style="color:#6366f1; text-decoration:underline; font-weight:600;">비나통(VinaTong) 홈페이지</a>로부터 생성되었습니다.</p>`;
 
     let featuredMediaId = null;
     if (postData.thumbnailUrl) {
@@ -326,6 +329,7 @@ async function publishToWix(postData, existingWixId = null) {
   const currentBannerUrl = postData.bannerImageUrl || "https://cdn.sanity.io/images/8xyje6wz/production/1d60b2d2c9402497f221e15614a4b8dc3c5ae833-1747x492.jpg";
   const currentBannerLink = postData.bannerLink || "https://www.vinatong.store";
   enrichedHtml += `<div style="text-align: center; margin-top: 30px; margin-bottom: 20px;"><a href="${currentBannerLink}" target="_blank"><img src="${currentBannerUrl}" alt="홍보 배너" style="max-width: 100%; height: auto; border-radius: 8px;" /></a></div>`;
+  enrichedHtml += `<p style="font-size:0.9rem; color:#6b7280; margin-top:20px; text-align:center;">*이글은 <a href="${canonicalUrl}" target="_blank" style="color:#6366f1; text-decoration:underline; font-weight:600;">비나통(VinaTong) 홈페이지</a>로부터 생성되었습니다.</p>`;
 
   const payload = {
     draftPost: {
@@ -570,9 +574,11 @@ export async function POST(request) {
             if (postData.thumbnailUrl) {
               finalHtml = `<div style="text-align: center; margin-bottom: 20px;"><img src="${postData.thumbnailUrl}" alt="${postData.title}" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; border-radius: 20px; display: block; margin: 0 auto;" /></div>\n` + finalHtml;
             }
+            const canonicalUrl = `https://www.vinatong.store/board?slug=${encodeURIComponent(postData.slug)}`;
             const currentBannerUrl = postData.bannerImageUrl || "https://cdn.sanity.io/images/8xyje6wz/production/1d60b2d2c9402497f221e15614a4b8dc3c5ae833-1747x492.jpg";
             const currentBannerLink = postData.bannerLink || "https://www.vinatong.store";
             finalHtml += `\n\n<div style="text-align: center; margin-top: 30px; margin-bottom: 20px;"><a href="${currentBannerLink}" target="_blank"><img src="${currentBannerUrl}" alt="홍보 배너" style="max-width: 100%; height: auto; border-radius: 8px;" /></a></div>`;
+            finalHtml += `\n\n<p style="font-size:0.9rem; color:#6b7280; margin-top:20px; text-align:center;">*이글은 <a href="${canonicalUrl}" target="_blank" style="color:#6366f1; text-decoration:underline; font-weight:600;">비나통(VinaTong) 홈페이지</a>로부터 생성되었습니다.</p>`;
 
             postData.content = finalHtml;
         }
