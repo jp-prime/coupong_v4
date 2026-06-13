@@ -72,7 +72,7 @@ const CompactStoreCard = ({ store, index }) => {
                 playTickSound();
 
                 const currentLang = i18n.language && i18n.language !== 'ko' ? `/${i18n.language}` : '';
-                router.push(`${currentLang}/store/${store.slug || store.id}`);
+                router.push(`${currentLang}/v4?storeId=${store.id}`);
             }}
             style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '12px' }}
         >
