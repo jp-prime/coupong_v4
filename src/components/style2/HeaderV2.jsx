@@ -113,7 +113,7 @@ const HeaderV2 = ({ searchQuery, setSearchQuery, isTransparent = false }) => {
                     {!isMobile && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginRight: '4px' }}>
                             <Link href="/localinfo" onClick={playTickSound} style={{ ...navLinkStyle, color: isTransparent ? '#818cf8' : '#6366f1' }}>지역정보</Link>
-                            <Link href="/v3" onClick={playTickSound} style={{ ...navLinkStyle, color: isTransparent ? '#10b981' : '#10b981' }}><Video size={14} /> SNS스타일</Link>
+                            <Link href="/v4" onClick={playTickSound} style={{ ...navLinkStyle, color: isTransparent ? '#10b981' : '#10b981' }}><Video size={14} /> SNS스타일</Link>
                             <Link href="/board" onClick={playTickSound} style={navLinkStyle}>커뮤니티</Link>
                             <Link href="/discount-mall" onClick={playTickSound} style={navLinkStyle}>할인몰</Link>
                             {settings.floatingKakaoVisible && (
@@ -177,7 +177,7 @@ const HeaderV2 = ({ searchQuery, setSearchQuery, isTransparent = false }) => {
                                             <div style={{ height: '1px', background: '#f1f5f9', margin: '4px 8px' }} />
                                             
                                             <div onClick={() => { playTickSound(); router.push('/localinfo'); setIsMenuOpen(false); }} className="dropdown-item" style={{ ...dropdownItemStyle, color: '#6366f1' }}><MapPin size={18} /> 지역정보</div>
-                                            <div onClick={() => { playTickSound(); router.push('/v3'); setIsMenuOpen(false); }} className="dropdown-item" style={{ ...dropdownItemStyle, color: '#10b981' }}><Video size={18} /> SNS스타일</div>
+                                            <div onClick={() => { playTickSound(); router.push('/v4'); setIsMenuOpen(false); }} className="dropdown-item" style={{ ...dropdownItemStyle, color: '#10b981' }}><Video size={18} /> SNS스타일</div>
                                             <div onClick={() => { playTickSound(); router.push('/board'); setIsMenuOpen(false); }} className="dropdown-item" style={dropdownItemStyle}><MessageSquare size={18} /> 커뮤니티</div>
                                             <div onClick={() => { playTickSound(); router.push('/discount-mall'); setIsMenuOpen(false); }} className="dropdown-item" style={dropdownItemStyle}><ShoppingBag size={18} /> 할인몰</div>
                                             <div onClick={() => { playTickSound(); router.push('/partner-apply'); setIsMenuOpen(false); }} className="dropdown-item" style={dropdownItemStyle}><LayoutGrid size={18} /> 입점신청</div>
