@@ -12,6 +12,7 @@ import { StoreService } from '../../services/StoreService';
 import { CouponService } from '../../services/CouponService';
 import { useStoreHelpers } from '../../hooks/useStoreHelpers';
 import UseCouponModal from '../../components/coupon/UseCouponModal';
+import RenderWithShortcodes from '../../components/promo/RenderWithShortcodes';
 
 // 1. 컴팩트하고 테크니컬한 오토플레이 비디오/유튜브 플레이어
 const VideoPlayer = ({ url, isActive }) => {
@@ -164,7 +165,7 @@ const ImageSlider = ({ store, fixImageUrl, getLocalizedString, isActive }) => {
     if (images.length === 0) return null;
 
     return (
-        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#09090b' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: '75px', overflow: 'hidden', background: '#09090b' }}>
             <AnimatePresence mode="wait">
                 <motion.img
                     key={currentIdx}
@@ -582,7 +583,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                     </p>
                                 )}
 
-                                {/* 설명구 드래그업 유도 텍스트 - 2줄 표시 */}
+                                {/* 설명구 드래그업 유도 텍스트 - 인라인 연결 */}
                                 {store.description && (
                                     <div 
                                         onClick={(e) => handleOpenDetailSheet(e, store)}
@@ -590,34 +591,27 @@ export default function StoresV4Page({ initialStores = [] }) {
                                             fontSize: '0.82rem',
                                             color: 'rgba(255,255,255,0.6)',
                                             lineHeight: '1.45',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'flex-start',
-                                            gap: '4px',
                                             cursor: 'pointer',
-                                            marginTop: '6px'
+                                            marginTop: '6px',
+                                            wordBreak: 'break-all'
                                         }}
                                     >
-                                        <span style={{
-                                            display: '-webkit-box',
-                                            WebkitLineClamp: 2,
-                                            WebkitBoxOrient: 'vertical',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            maxHeight: '2.9em'
-                                        }}>
-                                            {(() => {
-                                                const rawDesc = getLocalizedString(store.description) || "";
-                                                const cleanDesc = rawDesc
-                                                    .replace(/<[^>]*>?/gm, '')
-                                                    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '')
-                                                    .replace(/\[([^\]]*)\]\(([^)]+)\)/g, '$1')
-                                                    .replace(/[\*_~`#\-+>]/g, '')
-                                                    .trim();
-                                                return cleanDesc;
-                                            })()}
-                                        </span>
-                                        <span style={{ color: '#d4af37', fontWeight: 800, flexShrink: 0 }}>더보기</span>
+                                        {(() => {
+                                            const rawDesc = getLocalizedString(store.description) || "";
+                                            const cleanDesc = rawDesc
+                                                .replace(/<[^>]*>?/gm, '')
+                                                .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '')
+                                                .replace(/\[([^\]]*)\]\(([^)]+)\)/g, '$1')
+                                                .replace(/[\*_~`#\-+>]/g, '')
+                                                .trim();
+                                            const truncated = cleanDesc.length > 82 ? `${cleanDesc.substring(0, 82)}...` : cleanDesc;
+                                            return (
+                                                <>
+                                                    <span>{truncated}</span>
+                                                    <span style={{ color: '#d4af37', fontWeight: 800, marginLeft: '6px', whiteSpace: 'nowrap' }}>더보기</span>
+                                                </>
+                                            );
+                                        })()}
                                     </div>
                                 )}
 
@@ -834,42 +828,108 @@ export default function StoresV4Page({ initialStores = [] }) {
                                 </button>
                             </div>
 
-                            <div style={{ overflowY: 'auto', flex: 1, paddingRight: '4px' }} className="hide-scrollbar">
-                                <h3 style={{ fontSize: '1.5rem', fontWeight: 950, color: '#ffffff', margin: '0 0 4px 0' }}>
-                                    {getLocalizedString(detailStore.name)}
-                                </h3>
-                                <p style={{ fontSize: '0.92rem', color: '#a1a1aa', fontWeight: 700, margin: '0 0 20px 0' }}>
-                                    {getLocalizedString(detailStore.slogan)}
-                                </p>
+                            <div style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                                <div style={{ overflowY: 'auto', flex: 1, paddingRight: '4px', paddingBottom: '30px' }} className="hide-scrollbar">
+                                    <h3 style={{ fontSize: '1.5rem', fontWeight: 950, color: '#ffffff', margin: '0 0 4px 0' }}>
+                                        {getLocalizedString(detailStore.name)}
+                                    </h3>
+                                    <p style={{ fontSize: '0.92rem', color: '#a1a1aa', fontWeight: 700, margin: '0 0 20px 0' }}>
+                                        {getLocalizedString(detailStore.slogan)}
+                                    </p>
 
-                                <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', margin: '16px 0' }} />
+                                    <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', margin: '16px 0' }} />
 
-                                {/* 텍스트 디테일 마크다운 소개 정보 */}
-                                <div style={{ fontSize: '0.9rem', color: '#d4d4d8', lineHeight: '1.65', marginBottom: '24px' }}>
+                                    {/* 텍스트 디테일 마크다운 소개 정보 */}
                                     {getLocalizedString(detailStore.description) ? (
-                                        <div dangerouslySetInnerHTML={{ 
-                                            __html: getLocalizedString(detailStore.description)
-                                                .replace(/\n/g, '<br/>')
-                                                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                                        }} />
-                                    ) : '등록된 업체 설명정보가 없습니다.'}
-                                </div>
+                                        <div className="v4-markdown-dark" style={{ fontSize: '0.9rem', color: '#d4d4d8', lineHeight: '1.65', marginBottom: '24px' }}>
+                                            <RenderWithShortcodes text={getLocalizedString(detailStore.description)} />
+                                        </div>
+                                    ) : (
+                                        <div style={{ fontSize: '0.9rem', color: '#d4d4d8', lineHeight: '1.65', marginBottom: '24px' }}>
+                                            등록된 업체 설명정보가 없습니다.
+                                        </div>
+                                    )}
 
-                                {/* 위치 및 연락처 추가 정보 블록 */}
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                    {detailStore.address && (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '12px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.04)' }}>
-                                            <MapPin size={16} color="#d4af37" />
-                                            <span style={{ fontSize: '0.82rem', color: '#d4d4d8' }}>{getLocalizedString(detailStore.address)}</span>
-                                        </div>
-                                    )}
-                                    {(detailStore.phone || detailStore.phoneNumber) && (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '12px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.04)' }}>
-                                            <Phone size={16} color="#d4af37" />
-                                            <span style={{ fontSize: '0.82rem', color: '#d4d4d8' }}>{detailStore.phone || detailStore.phoneNumber}</span>
-                                        </div>
-                                    )}
+                                    {/* 위치 및 연락처 추가 정보 블록 */}
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                        {detailStore.address && (() => {
+                                            const mapLink = detailStore.googleMapUrl || detailStore.mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(getLocalizedString(detailStore.address))}`;
+                                            return (
+                                                <div 
+                                                    style={{ 
+                                                        display: 'flex', 
+                                                        alignItems: 'center', 
+                                                        justifyContent: 'space-between',
+                                                        gap: '12px', 
+                                                        background: 'rgba(255,255,255,0.02)', 
+                                                        padding: '12px 16px', 
+                                                        borderRadius: '12px', 
+                                                        border: '1px solid rgba(255,255,255,0.04)'
+                                                    }}
+                                                >
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: 0 }}>
+                                                        <MapPin size={16} color="#d4af37" style={{ flexShrink: 0 }} />
+                                                        <span style={{ fontSize: '0.82rem', color: '#d4d4d8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                            <strong>위치 : </strong>{getLocalizedString(detailStore.address)}
+                                                        </span>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => {
+                                                            if (mapLink) window.open(mapLink, '_blank');
+                                                        }}
+                                                        style={{
+                                                            flexShrink: 0,
+                                                            background: 'rgba(212, 175, 55, 0.15)',
+                                                            border: '1px solid #d4af37',
+                                                            color: '#d4af37',
+                                                            borderRadius: '6px',
+                                                            padding: '5px 10px',
+                                                            fontSize: '0.72rem',
+                                                            fontWeight: 900,
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            alignItems: 'center'
+                                                        }}
+                                                    >
+                                                        구글맵보기
+                                                    </button>
+                                                </div>
+                                            );
+                                        })()}
+                                        {(detailStore.phone || detailStore.phoneNumber) && (
+                                            <a 
+                                                href={`tel:${detailStore.phone || detailStore.phoneNumber}`}
+                                                style={{ 
+                                                    display: 'flex', 
+                                                    alignItems: 'center', 
+                                                    gap: '12px', 
+                                                    background: 'rgba(255,255,255,0.02)', 
+                                                    padding: '12px 16px', 
+                                                    borderRadius: '12px', 
+                                                    border: '1px solid rgba(255,255,255,0.04)',
+                                                    textDecoration: 'none',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                <Phone size={16} color="#d4af37" />
+                                                <span style={{ fontSize: '0.82rem', color: '#d4d4d8' }}>
+                                                    <strong>문의 : </strong><span style={{ color: '#d4af37', textDecoration: 'underline' }}>{detailStore.phone || detailStore.phoneNumber}</span>
+                                                </span>
+                                            </a>
+                                        )}
+                                    </div>
                                 </div>
+                                {/* 하단 3줄 흐려지는(사라지는) 효과 적용 (스크롤 가능함을 암시) */}
+                                <div style={{
+                                    position: 'absolute',
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: '40px',
+                                    background: 'linear-gradient(to bottom, transparent, #121214)',
+                                    pointerEvents: 'none',
+                                    zIndex: 10
+                                }} />
                             </div>
 
                             {/* 디테일 스토어 상세 홈페이지 연결 버튼 */}
@@ -896,7 +956,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                     boxShadow: '0 10px 25px rgba(99, 102, 241, 0.25)'
                                 }}
                             >
-                                <ExternalLink size={16} /> 공식 홈페이지 홈피 보기
+                                <ExternalLink size={16} /> 좀더 상세한 안내 보기
                             </button>
                         </motion.div>
                     </>
@@ -917,6 +977,54 @@ export default function StoresV4Page({ initialStores = [] }) {
             <style>{`
                 .hide-scrollbar::-webkit-scrollbar {
                     display: none;
+                }
+                /* 마크다운 다크모드 대응 강제 오버라이드 */
+                .v4-markdown-dark .promo-content-wrapper {
+                    color: #d4d4d8 !important;
+                    background: transparent !important;
+                }
+                .v4-markdown-dark .promo-content-block {
+                    color: #d4d4d8 !important;
+                    font-size: 0.9rem !important;
+                }
+                .v4-markdown-dark .promo-bold {
+                    color: #ffffff !important;
+                    font-weight: 800 !important;
+                }
+                .v4-markdown-dark h1, .v4-markdown-dark .promo-h1,
+                .v4-markdown-dark h2, .v4-markdown-dark .promo-h2,
+                .v4-markdown-dark h3, .v4-markdown-dark .promo-sub-title,
+                .v4-markdown-dark h4, .v4-markdown-dark .promo-h4 {
+                    color: #ffffff !important;
+                    border-bottom-color: rgba(255,255,255,0.08) !important;
+                }
+                .v4-markdown-dark .promo-blockquote {
+                    border-color: rgba(212, 175, 55, 0.3) !important;
+                    border-left-color: #d4af37 !important;
+                    background: rgba(212, 175, 55, 0.05) !important;
+                    color: #d4af37 !important;
+                }
+                .v4-markdown-dark .promo-blockquote * {
+                    color: #d4af37 !important;
+                }
+                .v4-markdown-dark .promo-callout-box {
+                    background-color: #18181b !important;
+                    border-color: #27272a !important;
+                    color: #d4d4d8 !important;
+                }
+                .v4-markdown-dark .promo-li {
+                    color: #d4d4d8 !important;
+                }
+                .v4-markdown-dark .promo-li::before {
+                    color: #d4af37 !important;
+                }
+                .v4-markdown-dark .promo-tag {
+                    background: rgba(212, 175, 55, 0.1) !important;
+                    color: #d4af37 !important;
+                    border-color: rgba(212, 175, 55, 0.2) !important;
+                }
+                .v4-markdown-dark .promo-link {
+                    color: #6366f1 !important;
                 }
             `}</style>
         </div>

@@ -214,6 +214,8 @@ export const StoreService = {
                         menuGroups: sData.menuGroups,
                         headerVideo: sData.headerVideo,
                         headerYoutube: sData.headerYoutube,
+                        googleMapUrl: sData.googleMapUrl || storeObj.googleMapUrl || '',
+                        mapUrl: sData.mapUrl || storeObj.mapUrl || '',
                         isSanityData: true
                     };
                 }
@@ -332,6 +334,8 @@ export const StoreService = {
                             menuGroups: sData.menuGroups,
                             headerVideo: sData.headerVideo,
                             headerYoutube: sData.headerYoutube,
+                            googleMapUrl: sData.googleMapUrl || storeObj.googleMapUrl || '',
+                            mapUrl: sData.mapUrl || storeObj.mapUrl || '',
                             isSanityData: true
                         };
                     }
