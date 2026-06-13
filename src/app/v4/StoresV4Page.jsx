@@ -570,7 +570,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                         color: '#ffffff',
                                         letterSpacing: '-0.8px',
                                         lineHeight: '1.15',
-                                        textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+                                        textShadow: '2px 2px 4px rgba(0,0,0,0.95)',
                                         cursor: 'pointer'
                                     }}
                                 >
@@ -586,7 +586,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                             margin: '0 0 10px 0',
                                             fontWeight: 700,
                                             lineHeight: '1.35',
-                                            textShadow: '0 1px 6px rgba(0,0,0,0.4)',
+                                            textShadow: '1.5px 1.5px 3px rgba(0,0,0,0.95)',
                                             fontFamily: "'Pretendard', sans-serif",
                                             cursor: 'pointer'
                                         }}
@@ -606,7 +606,8 @@ export default function StoresV4Page({ initialStores = [] }) {
                                             cursor: 'pointer',
                                             marginTop: '6px',
                                             wordBreak: 'break-all',
-                                            fontFamily: "'Pretendard', sans-serif"
+                                            fontFamily: "'Pretendard', sans-serif",
+                                            textShadow: '1px 1px 2px rgba(0,0,0,0.95)'
                                         }}
                                     >
                                         {(() => {
@@ -858,7 +859,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                     margin: 0,
                                     letterSpacing: '-0.8px',
                                     lineHeight: '1.15',
-                                    textShadow: '0 2px 12px rgba(0,0,0,0.85)'
+                                    textShadow: '2px 2px 4px rgba(0,0,0,0.95)'
                                 }}>
                                     {getLocalizedString(detailStore.name)}
                                 </h3>
@@ -868,7 +869,7 @@ export default function StoresV4Page({ initialStores = [] }) {
                                     fontWeight: 700, 
                                     margin: 0,
                                     lineHeight: '1.35',
-                                    textShadow: '0 2px 8px rgba(0,0,0,0.7)',
+                                    textShadow: '1.5px 1.5px 3px rgba(0,0,0,0.95)',
                                     fontFamily: "'Pretendard', sans-serif"
                                 }}>
                                     {getLocalizedString(detailStore.slogan)}
