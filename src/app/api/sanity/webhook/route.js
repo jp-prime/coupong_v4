@@ -212,9 +212,6 @@ async function publishToWordPress(postData, existingWpId = null) {
     const currentBannerLink = postData.bannerLink || "https://www.vinatong.store";
     enrichedContent += `\n\n<div style="text-align: center; margin-top: 30px; margin-bottom: 20px;"><a href="${currentBannerLink}" target="_blank"><img src="${currentBannerUrl}" alt="홍보 배너" style="max-width: 100%; height: auto; border-radius: 8px;" /></a></div>`;
 
-    const canonicalUrl = `https://www.vinatong.store/board?slug=${encodeURIComponent(postData.slug)}`;
-    enrichedContent += `\n\n<p style="text-align: center; margin-top: 20px; font-size: 0.9em; color: #888;">이 글은 <a href="${canonicalUrl}" target="_blank">비나통(VinaTong)</a>에서 최초 발행되었습니다.</p>`;
-
     let featuredMediaId = null;
     if (postData.thumbnailUrl) {
       featuredMediaId = await uploadImageToWordPress(postData.thumbnailUrl, postData.title, credentials);
@@ -329,7 +326,6 @@ async function publishToWix(postData, existingWixId = null) {
   const currentBannerUrl = postData.bannerImageUrl || "https://cdn.sanity.io/images/8xyje6wz/production/1d60b2d2c9402497f221e15614a4b8dc3c5ae833-1747x492.jpg";
   const currentBannerLink = postData.bannerLink || "https://www.vinatong.store";
   enrichedHtml += `<div style="text-align: center; margin-top: 30px; margin-bottom: 20px;"><a href="${currentBannerLink}" target="_blank"><img src="${currentBannerUrl}" alt="홍보 배너" style="max-width: 100%; height: auto; border-radius: 8px;" /></a></div>`;
-  enrichedHtml += `<p style="text-align: center; margin-top: 20px; font-size: 0.9em; color: #888;">이 글은 <a href="${canonicalUrl}" target="_blank">비나통(VinaTong)</a>에서 최초 발행되었습니다.</p>`;
 
   const payload = {
     draftPost: {
@@ -577,8 +573,6 @@ export async function POST(request) {
             const currentBannerUrl = postData.bannerImageUrl || "https://cdn.sanity.io/images/8xyje6wz/production/1d60b2d2c9402497f221e15614a4b8dc3c5ae833-1747x492.jpg";
             const currentBannerLink = postData.bannerLink || "https://www.vinatong.store";
             finalHtml += `\n\n<div style="text-align: center; margin-top: 30px; margin-bottom: 20px;"><a href="${currentBannerLink}" target="_blank"><img src="${currentBannerUrl}" alt="홍보 배너" style="max-width: 100%; height: auto; border-radius: 8px;" /></a></div>`;
-            const canonicalUrl = `https://www.vinatong.store/board?slug=${encodeURIComponent(postData.slug)}`;
-            finalHtml += `\n\n<p style="text-align: center; margin-top: 20px; font-size: 0.9em; color: #888;">이 글은 <a href="${canonicalUrl}" target="_blank">비나통(VinaTong)</a>에서 최초 발행되었습니다.</p>`;
 
             postData.content = finalHtml;
         }
