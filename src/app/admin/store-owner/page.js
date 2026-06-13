@@ -21,6 +21,8 @@ export default function StoreOwnerDashboardPage() {
     const [activeStore, setActiveStore] = useState(null);
     const [redemptionHistory, setRedemptionHistory] = useState([]);
 
+    const [localManagedStores, setLocalManagedStores] = useState([]);
+
     useEffect(() => {
         if (authLoading) return;
 
@@ -31,28 +33,13 @@ export default function StoreOwnerDashboardPage() {
             return;
         }
 
-        loadStoreAndCoupons();
-    }, [isStoreOwner, managedStoreId, authLoading, user]);
-
-    const [localManagedStores, setLocalManagedStores] = useState([]);
-
-    const loadStoreAndCoupons = async () => {
-        setLoading(true);
-        try {
-            // 운영자이고 할당된 매장이 없어서 managedStoreId가 없으면 전체 매장 중 첫 번째 것을 임시 로드하거나 빈 상태로 보여줌
-            const isSystemAdmin = user?.email && user.email.toLowerCase() === 'btmt2019@gmail.com';
-            
+        const setupStores = async () => {
             let storesToUse = managedStores || [];
             if (isSystemAdmin && (!storesToUse || storesToUse.length === 0)) {
-                // 운영자용 전체 매장 목록 조회 및 select 설정
                 const all = await StoreService.getAllStores(true);
                 if (all && all.length > 0) {
                     storesToUse = all;
                     setLocalManagedStores(all);
-                    if (!managedStoreId) {
-                        selectManagedStore(all[0].id);
-                        return;
-                    }
                 }
             } else if (storesToUse.length > 0 && localManagedStores.length === 0) {
                 setLocalManagedStores(storesToUse);
@@ -60,17 +47,47 @@ export default function StoreOwnerDashboardPage() {
 
             if (!managedStoreId && storesToUse.length > 0) {
                 selectManagedStore(storesToUse[0].id);
-                return;
+            } else {
+                loadStoreAndCoupons();
+            }
+        };
+
+        setupStores();
+    }, [authLoading, user, managedStores]);
+
+    useEffect(() => {
+        if (authLoading) return;
+        if (managedStoreId) {
+            loadStoreAndCoupons();
+        }
+    }, [managedStoreId, authLoading]);
+
+    const loadStoreAndCoupons = async () => {
+        setLoading(true);
+        try {
+            const isSystemAdmin = user?.email && user.email.toLowerCase() === 'btmt2019@gmail.com';
+            let storesToUse = managedStores || [];
+
+            if (isSystemAdmin && (!storesToUse || storesToUse.length === 0)) {
+                const all = await StoreService.getAllStores(true);
+                if (all && all.length > 0) {
+                    storesToUse = all;
+                    setLocalManagedStores(all);
+                }
+            } else if (storesToUse.length > 0 && localManagedStores.length === 0) {
+                setLocalManagedStores(storesToUse);
             }
 
-            if (managedStoreId) {
-                const store = await StoreService.getStoreById(managedStoreId);
+            const currentStoreId = managedStoreId || (storesToUse.length > 0 ? storesToUse[0].id : null);
+
+            if (currentStoreId) {
+                const store = await StoreService.getStoreById(currentStoreId);
                 setActiveStore(store);
 
-                const coupons = await CouponService.getCouponsByStoreId(managedStoreId);
+                const coupons = await CouponService.getCouponsByStoreId(currentStoreId);
                 setStoreCoupons(coupons);
 
-                const history = await CouponService.getStoreRedemptions(managedStoreId);
+                const history = await CouponService.getStoreRedemptions(currentStoreId);
                 setRedemptionHistory(history);
             }
         } catch (e) {
