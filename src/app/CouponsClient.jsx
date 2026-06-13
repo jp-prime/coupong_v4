@@ -53,7 +53,7 @@ export default function CouponsClient({ initialStores }) {
                     margin: windowWidth < 640 ? '12px 12px 16px 12px' : '20px 20px 20px 20px',
                     borderRadius: '24px',
                     position: 'relative',
-                    background: '#09090b',
+                    background: 'radial-gradient(circle at 15% 85%, rgba(168, 85, 247, 0.3), transparent 60%), radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.25), transparent 60%), #070709',
                     boxShadow: '0 12px 28px rgba(0,0,0,0.12)',
                     paddingBottom: '20px',
                     zIndex: 100,
@@ -107,7 +107,7 @@ export default function CouponsClient({ initialStores }) {
                     )}
 
                     {visibleCount < filteredStores.length && (
-                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px', marginBottom: '60px' }}>
                             <button 
                                 onClick={() => setVisibleCount(prev => prev + 12)}
                                 style={{ 

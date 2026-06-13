@@ -22,6 +22,15 @@ import { useCouponShare } from '../../../hooks/useCouponShare';
 import { playTickSound } from '../../../utils/sound';
 
 function GalleryTagCycler({ tags }) {
+    const [windowWidth, setWindowWidth] = useState(1200);
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+        setWindowWidth(window.innerWidth);
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     if (!tags || !Array.isArray(tags) || tags.length === 0) return null;
     const colors = ['#ffffff', '#22c55e', '#ffeb3b']; // 흰색, 밝은 녹색, 밝은 노랑색
     return (
@@ -34,9 +43,9 @@ function GalleryTagCycler({ tags }) {
                     exit={{ opacity: 0, x: -50, filter: 'blur(10px)', transition: { duration: 0.5 } }}
                     transition={{ delay: i * 0.8, duration: 0.8, type: "spring", stiffness: 100 }}
                     style={{
-                        color: colors[i % colors.length], fontSize: '21px', fontWeight: '950', fontFamily: "var(--font-dream)",
+                        color: colors[i % colors.length], fontSize: windowWidth < 768 ? '18px' : '2.0rem', fontWeight: '900', fontFamily: "'Noto Serif KR', serif",
                         letterSpacing: 'normal', lineHeight: '0.8', padding: '4px 0', textAlign: 'right',
-                        textShadow: `-3px -3px 0 #000, 0px -3px 0 #000, 3px -3px 0 #000, -3px 0px 0 #000, 3px 0px 0 #000, -3px 3px 0 #000, 0px 3px 0 #000, 3px 3px 0 #000, 0 10px 25px rgba(0,0,0,0.8)`,
+                        textShadow: `-2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 0px 0 #000, 2px 0px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000, 0 10px 25px rgba(0,0,0,0.8)`,
                         filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.3))'
                     }}
                 >
@@ -392,9 +401,8 @@ export default function StoreDetailClient({ id, initialStoreData }) {
                                             exit={{ opacity: 0 }}
                                             style={{
                                                 position: 'absolute',
-                                                top: '50%',
-                                                right: '24px',
-                                                transform: 'translateY(calc(-50% - 95px))'
+                                                top: '10%',
+                                                right: '24px'
                                             }}
                                         >
                                             <GalleryTagCycler tags={store.galleryTags} />
@@ -431,17 +439,57 @@ export default function StoreDetailClient({ id, initialStoreData }) {
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <img 
-                                        src="/1top_bedge.png" 
-                                        alt="Top 1 Badge" 
-                                        style={{ 
-                                            width: windowWidth < 768 ? '58px' : '70px', 
-                                            height: 'auto', 
-                                            display: 'block',
-                                            filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
-                                        }} 
-                                    />
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    {/* 좋아요 버튼 */}
+                                    <button
+                                        onClick={handleLike}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            width: windowWidth < 768 ? '38px' : '44px',
+                                            height: windowWidth < 768 ? '38px' : '44px',
+                                            borderRadius: '12px',
+                                            background: isLiked ? '#f43f5e' : 'rgba(255,255,255,0.2)',
+                                            backdropFilter: 'blur(10px)',
+                                            border: 'none',
+                                            color: 'white',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s',
+                                            boxShadow: '0 4px 10px rgba(0,0,0,0.2)'
+                                        }}
+                                    >
+                                        <Heart size={20} fill={isLiked ? '#ffffff' : 'none'} stroke="#ffffff" strokeWidth={2} />
+                                    </button>
+
+                                    {/* 쿠폰공유 버튼 */}
+                                    <button
+                                        onClick={() => {
+                                            if (coupons && coupons.length > 0) {
+                                                handleOpenGiftModal(coupons[0], store);
+                                            } else {
+                                                alert('공유할 수 있는 쿠폰이 없습니다.');
+                                            }
+                                        }}
+                                        disabled={isSharing}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            width: windowWidth < 768 ? '38px' : '44px',
+                                            height: windowWidth < 768 ? '38px' : '44px',
+                                            borderRadius: '12px',
+                                            background: 'rgba(255,255,255,0.2)',
+                                            backdropFilter: 'blur(10px)',
+                                            border: 'none',
+                                            color: 'white',
+                                            cursor: isSharing ? 'wait' : 'pointer',
+                                            transition: 'all 0.2s',
+                                            boxShadow: '0 4px 10px rgba(0,0,0,0.2)'
+                                        }}
+                                    >
+                                        {isSharing ? <Loader2 size={20} className="animate-spin" color="#ffffff" /> : <Share2 size={20} />}
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -450,106 +498,6 @@ export default function StoreDetailClient({ id, initialStoreData }) {
 
                     <div style={{ padding: windowWidth < 768 ? '12px 16px' : '20px 24px' }}>
                         <div style={{ maxWidth: '800px' }}>
-                            <div style={{
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(3, 1fr)',
-                                gap: windowWidth < 768 ? '8px' : '12px',
-                                marginBottom: windowWidth < 768 ? '16px' : '24px',
-                                marginTop: windowWidth < 768 ? '4px' : '8px'
-                            }}>
-                                    <motion.button
-                                        whileTap={{ scale: 0.95 }}
-                                        onClick={handleLike}
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            gap: '6px',
-                                            padding: '12px 8px',
-                                            background: isLiked ? '#fff1f2' : '#f8fafc',
-                                            border: `1px solid ${isLiked ? '#fecaca' : '#e2e8f0'}`,
-                                            borderRadius: '16px',
-                                            color: isLiked ? '#f43f5e' : '#64748b',
-                                            cursor: 'pointer',
-                                            transition: 'all 0.2s',
-                                            boxShadow: isLiked ? '0 4px 12px rgba(244, 63, 94, 0.08)' : '0 2px 8px rgba(0,0,0,0.02)'
-                                        }}
-                                    >
-                                        <motion.div
-                                            animate={isLiked ? { scale: [1, 1.3, 1] } : {}}
-                                            transition={{ duration: 0.3 }}
-                                        >
-                                            <Heart size={20} fill={isLiked ? '#f43f5e' : 'none'} stroke={isLiked ? '#f43f5e' : '#64748b'} strokeWidth={2} />
-                                        </motion.div>
-                                        <span style={{ fontSize: '0.82rem', fontWeight: 800 }}>
-                                            {!user ? '로그인 필요' : isLiked ? '좋아요 ♥' : '좋아요'}{likeCount > 0 && <span style={{ marginLeft: '2px', opacity: 0.9 }}> {likeCount}</span>}
-                                        </span>
-                                    </motion.button>
-
-                                <motion.button
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={() => {
-                                        const videoUrl = store?.youtubeLink || store?.headerYoutube;
-                                        if (videoUrl) {
-                                            window.open(videoUrl, '_blank');
-                                        } else {
-                                            alert('등록된 유튜브 영상이 없습니다.');
-                                        }
-                                    }}
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        gap: '6px',
-                                        padding: '12px 8px',
-                                        background: '#f8fafc',
-                                        border: '1px solid #e2e8f0',
-                                        borderRadius: '16px',
-                                        color: '#64748b',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
-                                    }}
-                                >
-                                    <Play size={20} color="#ff0000" fill="#ff0000" />
-                                    <span style={{ fontSize: '0.82rem', fontWeight: 800 }}>영상보기</span>
-                                </motion.button>
-
-                                <motion.button
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={() => {
-                                        if (coupons && coupons.length > 0) {
-                                            handleOpenGiftModal(coupons[0], store);
-                                        } else {
-                                            alert('공유할 수 있는 쿠폰이 없습니다.');
-                                        }
-                                    }}
-                                    disabled={isSharing}
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        gap: '6px',
-                                        padding: '12px 8px',
-                                        background: '#f8fafc',
-                                        border: '1px solid #e2e8f0',
-                                        borderRadius: '16px',
-                                        color: '#64748b',
-                                        cursor: isSharing ? 'wait' : 'pointer',
-                                        transition: 'all 0.2s',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
-                                    }}
-                                >
-                                    {isSharing ? <Loader2 size={20} className="animate-spin" color="#10b981" /> : <Share2 size={20} />}
-                                    <span style={{ fontSize: '0.82rem', fontWeight: 800 }}>
-                                        {isSharing ? '공유중...' : '쿠폰공유'}
-                                    </span>
-                                </motion.button>
-                            </div>
-
                             <div style={{ marginBottom: windowWidth < 768 ? '24px' : '32px', background: 'white', borderRadius: '24px', padding: windowWidth < 768 ? '16px 12px' : '20px', border: '1px solid #f1f5f9' }}>
                                 <div style={{ 
                                     display: 'flex', 

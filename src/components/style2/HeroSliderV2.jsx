@@ -9,10 +9,18 @@ import { SanityService } from '../../services/SanityService';
 import { playTickSound } from '../../utils/sound';
 
 const DEFAULT_BANNERS = [
-    { id: 1, image: 'https://images.unsplash.com/photo-1550966842-2849a28c0a61?q=80&w=2070&auto=format&fit=crop', title: 'LUIGI', caption: '호치민 최고의 프리미엄 다이닝 경험을 선사합니다.', tag: 'STAFF PICK', buttonText: '업체정보 보기', buttonLink: '/store/luigi', buttonIcon: 'Store', buttonBgColor: '#ffffff', buttonTextColor: '#000000' },
-    { id: 2, image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=2070&auto=format&fit=crop', title: 'ZEN SPA', caption: '지친 일상에 평온을 더하는 힐링 마사지.', tag: 'HOT DEAL', buttonText: '쿠폰받기', buttonLink: '/store/zenspa', buttonIcon: 'Ticket', buttonBgColor: '#FEE500', buttonTextColor: '#000000' },
-    { id: 3, image: 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?q=80&w=2070&auto=format&fit=crop', title: 'VILLA SPA', caption: '품격 있는 공간에서 즐기는 최고의 테라피.', tag: 'NEW OPEN', buttonText: '자세히 보기', buttonLink: '/store/villaspa', buttonIcon: 'MessageCircle', buttonBgColor: '#6366f1', buttonTextColor: '#ffffff' },
-    { id: 4, image: 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?q=80&w=2070&auto=format&fit=crop', title: 'K-BAP', caption: '호치민에서 만나는 가장 정갈한 한국의 맛.', tag: 'BEST', buttonText: '메뉴보기', buttonLink: '/store/kbap', buttonIcon: 'Store', buttonBgColor: '#ffffff', buttonTextColor: '#000000' }
+    {
+        id: 'default_notice',
+        title: '비나통 VinaTong',
+        caption: '베트남 여행은 비나통으로 통한다! 우리동네 맛집부터 핫플레스까지, 쿠폰으로 더욱 특별하게 즐기세요. 지금 무료 입점신청하세요',
+        tag: 'NOTICE',
+        buttonText: '입점신청',
+        buttonLink: '/partner-apply',
+        buttonIcon: 'LayoutGrid',
+        buttonBgColor: '#6366f1',
+        buttonTextColor: '#ffffff',
+        image: ''
+    }
 ];
 
 const ICON_OPTIONS = [
@@ -159,7 +167,7 @@ const HeroSliderV2 = ({ isAdmin, searchQuery, setSearchQuery, isMerged = false }
     const renderInnerContent = () => (
         <>
             {/* Sliding Text Area */}
-            <div style={{ zIndex: 2, position: 'relative', minHeight: '52px', height: 'auto', overflow: 'hidden', marginTop: isMerged ? '8px' : '0px' }}>
+            <div style={{ zIndex: 2, position: 'relative', minHeight: '52px', height: 'auto', overflow: 'visible', marginTop: isMerged ? '8px' : '0px' }}>
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentIdx}

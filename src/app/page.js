@@ -25,7 +25,9 @@ export default async function CouponsV2Page() {
         console.error("Failed to load stores on server side:", error);
     }
 
+    const serializedStores = JSON.parse(JSON.stringify(initialStores));
+
     return (
-        <CouponsClient initialStores={initialStores} />
+        <CouponsClient initialStores={serializedStores} />
     );
 }

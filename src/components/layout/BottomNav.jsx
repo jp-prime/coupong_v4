@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Home, Store, MessageSquare, User } from 'lucide-react';
+import { Home, Store, MessageSquare, User, MapPin } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { playTickSound } from '@/utils/sound';
 
@@ -49,6 +49,7 @@ const BottomNav = () => {
     const navItems = [
         { id: 'coupons', label: '쿠폰북', icon: Home, path: '/' },
         { id: 'service', label: '쿠폰입점', icon: Store, path: '/partner-apply' },
+        { id: 'localinfo', label: '지역정보', icon: MapPin, path: '/localinfo' },
         { id: 'promos', label: '커뮤니티', icon: MessageSquare, path: '/board' },
         { id: 'mypage', label: '마이페이지', icon: User, path: user ? '/mypage' : '/login' }
     ];
@@ -63,13 +64,14 @@ const BottomNav = () => {
     };
 
     const isStorePage = pathname.includes('/store/');
+    const isV3Page = pathname === '/v3' || pathname.startsWith('/v3/');
 
     const handleNavigate = (path) => {
         playTickSound();
         router.push(path);
     };
 
-    if (isKeyboardOpen || isStorePage) return null;
+    if (isKeyboardOpen || isStorePage || isV3Page) return null;
 
     return (
         <nav style={{

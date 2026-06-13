@@ -97,11 +97,7 @@ const Footer = () => {
                 </a>
             </div>
 
-            {isMainPage && (
-                <div style={{ marginTop: '16px' }}>
-                    <VisitorCounter pageId="global_main" />
-                </div>
-            )}
+
 
             <p style={{ margin: '8px 0 0 0', fontSize: '0.7rem', color: '#cbd5e1', fontFamily: 'var(--font-base)' }}>
                 {t('footer.copyright')}

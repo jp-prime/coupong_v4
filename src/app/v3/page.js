@@ -43,9 +43,11 @@ export default async function V3Page() {
         console.error("Server-side store fetch failed:", e);
     }
 
+    const serializedStores = JSON.parse(JSON.stringify(initialStores));
+
     return (
         <Suspense fallback={<div style={{ background: '#000', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>로딩 중...</div>}>
-            <StoresV3Page initialStores={initialStores} />
+            <StoresV3Page initialStores={serializedStores} />
         </Suspense>
     );
 }

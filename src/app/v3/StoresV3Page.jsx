@@ -207,6 +207,15 @@ const ImageSlider = ({ store, fixImageUrl, getLocalizedString, isActive }) => {
 };
 
 function GalleryTagCycler({ tags }) {
+    const [windowWidth, setWindowWidth] = React.useState(1200);
+    React.useEffect(() => {
+        if (typeof window === "undefined") return;
+        setWindowWidth(window.innerWidth);
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     if (!tags || !Array.isArray(tags) || tags.length === 0) return null;
     const colors = ['#ffffff', '#22c55e', '#ffeb3b'];
     return (
@@ -219,9 +228,9 @@ function GalleryTagCycler({ tags }) {
                     exit={{ opacity: 0, x: -50, filter: 'blur(10px)', transition: { duration: 0.5 } }}
                     transition={{ delay: i * 0.8, duration: 0.8, type: "spring", stiffness: 100 }}
                     style={{
-                        color: colors[i % colors.length], fontSize: '21px', fontWeight: '950', fontFamily: "var(--font-dream)",
+                        color: colors[i % colors.length], fontSize: windowWidth < 768 ? '18px' : '1.8rem', fontWeight: '900', fontFamily: "'Noto Serif KR', serif",
                         letterSpacing: 'normal', lineHeight: '0.8', padding: '4px 0', textAlign: 'right',
-                        textShadow: `-3px -3px 0 #000, 0px -3px 0 #000, 3px -3px 0 #000, -3px 0px 0 #000, 3px 0px 0 #000, -3px 3px 0 #000, 0px 3px 0 #000, 3px 3px 0 #000, 0 10px 25px rgba(0,0,0,0.8)`,
+                        textShadow: `-2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 0px 0 #000, 2px 0px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000, 0 10px 25px rgba(0,0,0,0.8)`,
                         filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.3))'
                     }}
                 >
@@ -595,6 +604,87 @@ export default function StoresV3Page({ initialStores = [] }) {
                                     cursor: 'pointer'
                                 }}
                             >
+                                {/* Floating Right Icon Group */}
+                                <div style={{
+                                    position: 'absolute',
+                                    right: '12px',
+                                    bottom: 'calc(100% + 16px)',
+                                    zIndex: 30,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '12px'
+                                }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+                                        <button 
+                                            onClick={(e) => handleLikeToggle(e, store)}
+                                            style={{
+                                                width: '42px',
+                                                height: '42px',
+                                                borderRadius: '50%',
+                                                background: likedMap[store.id] ? 'rgba(244, 63, 94, 0.2)' : 'rgba(0,0,0,0.6)',
+                                                border: likedMap[store.id] ? '1.5px solid #f43f5e' : '1.5px solid rgba(255,255,255,0.3)',
+                                                color: likedMap[store.id] ? '#f43f5e' : '#fff',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                backdropFilter: 'blur(10px)',
+                                                transition: 'all 0.2s'
+                                            }}
+                                        >
+                                            <Heart size={20} fill={likedMap[store.id] ? '#f43f5e' : 'none'} />
+                                        </button>
+                                        <span style={{ color: '#e4e4e7', fontSize: '0.62rem', fontWeight: 800 }}>{store.likeCount || 0}</span>
+                                    </div>
+
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+                                        <button 
+                                            onClick={(e) => handleContact(e, store)}
+                                            style={{
+                                                width: '42px',
+                                                height: '42px',
+                                                borderRadius: '50%',
+                                                background: 'rgba(0,0,0,0.6)',
+                                                border: '1.5px solid rgba(255,255,255,0.3)',
+                                                color: '#fff',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                backdropFilter: 'blur(10px)'
+                                            }}
+                                        >
+                                            <Phone size={20} />
+                                        </button>
+                                        <span style={{ color: '#e4e4e7', fontSize: '0.62rem', fontWeight: 800 }}>문의하기</span>
+                                    </div>
+
+
+
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+                                        <button 
+                                            onClick={(e) => handleShare(e, store)}
+                                            style={{
+                                                width: '42px',
+                                                height: '42px',
+                                                borderRadius: '50%',
+                                                background: 'rgba(0,0,0,0.6)',
+                                                border: '1.5px solid rgba(255,255,255,0.3)',
+                                                color: '#fff',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                backdropFilter: 'blur(10px)'
+                                            }}
+                                        >
+                                            <Share2 size={20} />
+                                        </button>
+                                        <span style={{ color: '#e4e4e7', fontSize: '0.62rem', fontWeight: 800 }}>공유하기</span>
+                                    </div>
+                                </div>
+
                                 <div style={{
                                     overflowY: 'hidden',
                                     flex: 1,
@@ -654,8 +744,9 @@ export default function StoresV3Page({ initialStores = [] }) {
                                             fontSize: '1.2rem',
                                             color: '#e4e4e7',
                                             margin: '0 0 6px 0',
-                                            fontWeight: 750,
-                                            lineHeight: '1.4'
+                                            fontWeight: 900,
+                                            lineHeight: '1.4',
+                                            fontFamily: "'Noto Serif KR', serif"
                                         }}>{getLocalizedString(store.slogan)}</p>
                                     )}
 
@@ -735,127 +826,6 @@ export default function StoresV3Page({ initialStores = [] }) {
                                 )}
                             </div>
 
-                            <div style={{
-                                position: 'absolute',
-                                right: '12px',
-                                bottom: isStandaloneBrowser ? 'calc(240px + env(safe-area-inset-bottom))' : 'calc(210px + env(safe-area-inset-bottom))',
-                                zIndex: 30,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: '12px'
-                            }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-                                    <button 
-                                        onClick={(e) => handleLikeToggle(e, store)}
-                                        style={{
-                                            width: '42px',
-                                            height: '42px',
-                                            borderRadius: '50%',
-                                            background: likedMap[store.id] ? 'rgba(244, 63, 94, 0.2)' : 'rgba(0,0,0,0.6)',
-                                            border: likedMap[store.id] ? '1.5px solid #f43f5e' : '1.5px solid rgba(255,255,255,0.3)',
-                                            color: likedMap[store.id] ? '#f43f5e' : '#fff',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            cursor: 'pointer',
-                                            backdropFilter: 'blur(10px)',
-                                            transition: 'all 0.2s'
-                                        }}
-                                    >
-                                        <Heart size={20} fill={likedMap[store.id] ? '#f43f5e' : 'none'} />
-                                    </button>
-                                    <span style={{ color: '#e4e4e7', fontSize: '0.62rem', fontWeight: 800 }}>{store.likeCount || 0}</span>
-                                </div>
-
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-                                    <button 
-                                        onClick={(e) => handleUseCoupon(e, store)}
-                                        style={{
-                                            width: '42px',
-                                            height: '42px',
-                                            borderRadius: '50%',
-                                            background: 'rgba(0,0,0,0.6)',
-                                            border: '1.5px solid rgba(255,255,255,0.3)',
-                                            color: '#ef4444',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            cursor: 'pointer',
-                                            backdropFilter: 'blur(10px)'
-                                        }}
-                                    >
-                                        <Ticket size={20} />
-                                    </button>
-                                    <span style={{ color: '#e4e4e7', fontSize: '0.62rem', fontWeight: 800 }}>쿠폰사용</span>
-                                </div>
-
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-                                    <button 
-                                        onClick={(e) => handleContact(e, store)}
-                                        style={{
-                                            width: '42px',
-                                            height: '42px',
-                                            borderRadius: '50%',
-                                            background: 'rgba(0,0,0,0.6)',
-                                            border: '1.5px solid rgba(255,255,255,0.3)',
-                                            color: '#fff',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            cursor: 'pointer',
-                                            backdropFilter: 'blur(10px)'
-                                        }}
-                                    >
-                                        <Phone size={20} />
-                                    </button>
-                                    <span style={{ color: '#e4e4e7', fontSize: '0.62rem', fontWeight: 800 }}>문의하기</span>
-                                </div>
-
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-                                    <button 
-                                        onClick={(e) => handleDetail(e, store)}
-                                        style={{
-                                            width: '42px',
-                                            height: '42px',
-                                            borderRadius: '50%',
-                                            background: 'rgba(0,0,0,0.6)',
-                                            border: '1.5px solid rgba(255,255,255,0.3)',
-                                            color: '#fff',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            cursor: 'pointer',
-                                            backdropFilter: 'blur(10px)'
-                                        }}
-                                    >
-                                        <Eye size={20} />
-                                    </button>
-                                    <span style={{ color: '#e4e4e7', fontSize: '0.62rem', fontWeight: 800 }}>상세보기</span>
-                                </div>
-
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-                                    <button 
-                                        onClick={(e) => handleShare(e, store)}
-                                        style={{
-                                            width: '42px',
-                                            height: '42px',
-                                            borderRadius: '50%',
-                                            background: 'rgba(0,0,0,0.6)',
-                                            border: '1.5px solid rgba(255,255,255,0.3)',
-                                            color: '#fff',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            cursor: 'pointer',
-                                            backdropFilter: 'blur(10px)'
-                                        }}
-                                    >
-                                        <Share2 size={20} />
-                                    </button>
-                                    <span style={{ color: '#e4e4e7', fontSize: '0.62rem', fontWeight: 800 }}>공유하기</span>
-                                </div>
-                            </div>
                         </div>
                     );
                 })}

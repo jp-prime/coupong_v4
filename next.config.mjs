@@ -7,6 +7,7 @@ const nextConfig = {
     unoptimized: true,
   }
   */
+  allowedDevOrigins: ['192.168.0.4', 'localhost']
 };
 
 export default nextConfig;
